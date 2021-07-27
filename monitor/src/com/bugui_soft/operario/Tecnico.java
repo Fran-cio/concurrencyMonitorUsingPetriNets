@@ -1,9 +1,11 @@
 package com.bugui_soft.operario;
 
-import com.bugui_soft.Main;
+import java.util.concurrent.TimeUnit;
+
+import static com.bugui_soft.Main.monitor;
 
 public class Tecnico implements Runnable {
-    private Integer[] tInvariante;
+    private final Integer[] tInvariante;
     private Integer tActual; //proxima transicion a disparar
 
     public  Tecnico() {

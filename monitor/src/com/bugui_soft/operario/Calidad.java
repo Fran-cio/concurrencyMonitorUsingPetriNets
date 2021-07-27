@@ -1,21 +1,26 @@
 package com.bugui_soft.operario;
 
-import com.bugui_soft.Main;
+import java.util.concurrent.TimeUnit;
+
+import static com.bugui_soft.Main.monitor;
 
 public class Calidad implements Runnable {
 
-   private Integer tInvariante;// transición próxima a disparar
+    private final Integer[] tInvariante;// transición próxima a disparar
 
     public Calidad() {
-        tInvariante=1; //dispara solo T1
+        //Invariante de transiciones del Descartador.(T1)
+        tInvariante = new Integer[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     }
 
     public void run() {
         while (true) {
-            Main.monitor.dispararTransicion();
-            Main.rdp.disparar(tInvariante);
-
-
+            monitor.dispararTransicion(tInvariante);
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }

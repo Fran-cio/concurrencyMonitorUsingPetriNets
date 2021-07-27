@@ -1,22 +1,19 @@
 package com.bugui_soft.operario;
 
-import com.bugui_soft.Main;
+import java.util.concurrent.TimeUnit;
+
+import static com.bugui_soft.Main.monitor;
 
 public class Productor implements Runnable {
 
-    private Integer[] tInvariante;
-    private Integer tActual;// transición próxima a disparar
+    private final Integer[] tInvariante;
 
-    public  Productor() {
-        tActual=4;
-        //Invariante de transiciones del Productor.
-        tInvariante = new Integer[4];
-        for (int i = 0; i < tInvariante.length; i++) {
-            tInvariante[i] = 4 + i; //transiciones de T4 a T7
-        }
+    public Productor() {
+        //Invariante de transiciones del Productor.(T4 a T7)
+        tInvariante = new Integer[]{0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
     }
 
-      public void run() {
+    public void run() {
         while (true) {
             Main.monitor.dispararTransicion();
             Main.rdp.disparar(tInvariante[tActual]);

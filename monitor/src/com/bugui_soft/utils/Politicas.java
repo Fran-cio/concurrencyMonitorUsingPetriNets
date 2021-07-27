@@ -1,9 +1,35 @@
 package com.bugui_soft.utils;
 
-public class Politicas {
+import static com.bugui_soft.Main.rdp;
 
-    public int decidir(int[] transiciones){
-       int val= (int) ((Math.random()*10) %transiciones.length); //ACA LA RE FLASHE VER AH
-       return val;
+public class Politicas {
+    /**
+     * Devuelve la transición menos disparada
+     */
+    public Integer cualDisparar(Integer[] transPot) {
+        Integer posMin = 0;
+        try {
+            posMin = obtenerMenor(transPot);
+            rdp.getDispContador()[posMin]++;
+        } catch (IllegalStateException e) {
+            System.out.println("Se produjo un deadlock, revisar red de petri");
+            e.printStackTrace();
+        }
+        return posMin;
+    }
+
+    private Integer obtenerMenor(Integer[] transPot) throws IllegalStateException {
+        Integer minimo = Integer.MAX_VALUE;
+        int posMin = 0;
+        for (int i = 0; i < transPot.length; i++) {
+            if ((rdp.getDispContador()[i] < minimo) && (transPot[i] != 0)) {
+                minimo = rdp.getDispContador()[i];
+                posMin = i;
+            }
+        }
+        if (minimo == Integer.MAX_VALUE) {
+            throw new IllegalStateException();
+        }
+        return posMin;
     }
 }

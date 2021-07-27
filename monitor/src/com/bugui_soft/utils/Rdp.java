@@ -1,23 +1,20 @@
 package com.bugui_soft.utils;
 
-import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
-import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
+import java.util.Arrays;
+import static com.bugui_soft.Main.logger;
+import static com.bugui_soft.utils.Constantes.*;
+import static com.bugui_soft.utils.CustomLogger.setNumDisparo;
 import static com.bugui_soft.utils.Utilidades.productoMatricial;
 import static com.bugui_soft.utils.Utilidades.sumarVectores;
 
 public class Rdp {
-    private Integer nTrans;//numero de transiciones
-    private Integer nPlz; //numero de lugares/plazas
-    private Integer[][] mtxIncidencia; //matriz de incidencia
+    private final Integer[][] mtxIncidencia; //matriz de incidencia
     private final Integer[] marcadoInicial; //marcado inicial
     private Integer[] marcadoActual;
-    private Integer[] tSensibilizadas; //array de estado de sensibilización de transiciones
+    private final VectorTSensibilizadas tSensibilizadasActual;
+    private final Integer[] dispContador;
 
     public Rdp() {
-
-        nTrans = CANTIDAD_TRANSICIONES;
-        nPlz = CANTIDAD_PLAZAS;
-
         mtxIncidencia = new Integer[][]{
                 {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
                 {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -42,26 +39,79 @@ public class Rdp {
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
         marcadoActual = marcadoInicial;
 
-        tSensibilizadas = new Integer[]{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+        //array de estado de sensibilización de transiciones
+        Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+        tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
+
+        dispContador = new Integer[CANTIDAD_TRANSICIONES];
+        Arrays.fill(dispContador, 0);
     }
 
-    public synchronized void disparar(Integer disparo) {
+    /**
+     * Dispara la red de petri, cambiando su marcado y transiciones sensibilizadas
+     * , devuelve un Boolean dependiendo de si se pudo disparar o no.
+     */
+    public Boolean disparar(Integer disparo) {
+        if (tSensibilizadasActual.estaSensibilizado(disparo)) {
+            actualizarMarcado(disparo);
+            actualizarTSensibilizadas();
+            dispContador[disparo]++;
+            setNumDisparo(disparo);
+            logger.run();
+            return true;
+        }
+        return false;
+    }
+
+    private void actualizarMarcado(Integer disparo) {
         Integer[] vecDisparar = new Integer[CANTIDAD_TRANSICIONES];
+        Arrays.fill(vecDisparar, 0);
         vecDisparar[disparo] = 1;
         try {
-            marcadoActual = sumarVectores(marcadoInicial, productoMatricial(mtxIncidencia, vecDisparar));
-            //TODO: hacer una función que re-calcule las sensibilizadas
+            System.out.println(Arrays.toString(marcadoActual));
+            marcadoActual = sumarVectores(marcadoActual, productoMatricial(mtxIncidencia, vecDisparar));
+            System.out.println(Arrays.toString(marcadoActual));
+            actualizarTSensibilizadas();
+
         } catch (IndexOutOfBoundsException e) {
+            System.out.println("El valor de disparo es más grande que el número de transiciones");
             e.printStackTrace();
         }
     }
 
-    public Integer[] getSensibilizada() {
-        return tSensibilizadas;
+    private void actualizarTSensibilizadas() {
+        //creo un arreglo inicializado en 0 por defecto
+        int puntero = 0;
+        Integer[] nuevaTS = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        //convierto en 1, los punteros a transiciones sencibilizadas
+        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {//busco por cada transición
+            boolean aux = true;
+            for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si esta sencibilizada por sus plazas
+                //si al menos le falta un token no esta sensibilizada
+                if (marcadoActual[j] >= 1 && mtxIncidencia[j][i] == -1) {
+                    aux = false;
+                    break;
+                }
+            }
+            if (aux) {
+                nuevaTS[puntero] = 1; //Tsencibilizada
+                puntero++;
+            }
+        }
+        setSensibilizadas(nuevaTS);
     }
 
-    public Integer[] getMarcadoActual() {
-        return marcadoActual;
+    private void setSensibilizadas(Integer[] nuevaTS) {
+        tSensibilizadasActual.setSensibilizado(nuevaTS);
+    }
+
+    public Integer[] getSensibilizadas() {
+        return tSensibilizadasActual.getSensibilizada();
+    }
+
+    public Integer[] getDispContador() {
+        return dispContador;
     }
 }
 

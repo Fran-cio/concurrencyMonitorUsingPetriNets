@@ -8,10 +8,12 @@ import static com.bugui_soft.utils.Constantes.*;
 
 public class Main {
     //crear el monitor
-    public static final Monitor monitor = new Monitor();
     private static final OperarioFactory operarioFactory = new OperarioFactory();
     private static final ArrayList<Runnable> operarios = new ArrayList<>(Constantes.CANTIDAD_OPERARIOS);
+    private static final HilosFactory hilosFactory = new HilosFactory();
+    public static final Monitor monitor = new Monitor();
     public static final Rdp rdp = new Rdp();
+    public static final CustomLogger logger = new CustomLogger();
 
     public static void main(String[] args) {
         cargarOperarios();
