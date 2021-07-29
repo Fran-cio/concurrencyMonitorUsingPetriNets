@@ -1,5 +1,7 @@
 package com.bugui_soft.utils;
 
+import jdk.jfr.Unsigned;
+
 import java.util.Arrays;
 import static com.bugui_soft.Main.logger;
 import static com.bugui_soft.utils.Constantes.*;
@@ -40,7 +42,7 @@ public class Rdp {
         marcadoActual = marcadoInicial;
 
         //array de estado de sensibilización de transiciones
-        Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+        Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
         tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
 
         dispContador = new Integer[CANTIDAD_TRANSICIONES];
@@ -71,8 +73,6 @@ public class Rdp {
             System.out.println(Arrays.toString(marcadoActual));
             marcadoActual = sumarVectores(marcadoActual, productoMatricial(mtxIncidencia, vecDisparar));
             System.out.println(Arrays.toString(marcadoActual));
-            actualizarTSensibilizadas();
-
         } catch (IndexOutOfBoundsException e) {
             System.out.println("El valor de disparo es más grande que el número de transiciones");
             e.printStackTrace();
@@ -82,22 +82,27 @@ public class Rdp {
     private void actualizarTSensibilizadas() {
         //creo un arreglo inicializado en 0 por defecto
         int puntero = 0;
-        Integer[] nuevaTS = new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-        //convierto en 1, los punteros a transiciones sencibilizadas
+        //convierto en 1, los punteros a transiciones sensibilizadas
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {//busco por cada transición
             boolean aux = true;
             for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si esta sencibilizada por sus plazas
                 //si al menos le falta un token no esta sensibilizada
-                if (marcadoActual[j] >= 1 && mtxIncidencia[j][i] == -1) {
-                    aux = false;
-                    break;
+                if (mtxIncidencia[j][i] == -1){
+                    if(marcadoActual[j] < 1){
+                        nuevaTS[i] = 0;
+                    }
                 }
+//                if (marcadoActual[j] >= 1 && mtxIncidencia[j][i] == -1) {
+//                    aux = false;
+//                    break;
+//                }
             }
-            if (aux) {
-                nuevaTS[puntero] = 1; //Tsencibilizada
-                puntero++;
-            }
+//            if (aux) {
+//                nuevaTS[puntero] = 1; //Tsensibilizada
+//                puntero++;
+//            }
         }
         setSensibilizadas(nuevaTS);
     }

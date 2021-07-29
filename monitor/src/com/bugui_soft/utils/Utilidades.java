@@ -7,15 +7,16 @@ public class Utilidades {
 
     //Calcula el producto punto pero solo para los valores de plazas y transiciones definidos
     public static Integer[] productoMatricial(Integer[][] matriz, Integer[] vector) {
-        Integer[] marcadoResultante = new Integer[CANTIDAD_PLAZAS];
+        Integer[] productoMatricial = new Integer[CANTIDAD_PLAZAS];
+        //plazas filas de la matriz, transiciones columnas
         for (int i = 0; i < CANTIDAD_PLAZAS; i++) {
             int aux = 0;
             for (int j = 0; j < CANTIDAD_TRANSICIONES; j++) {
                 aux += matriz[i][j] * vector[j];
             }
-            marcadoResultante[i] = aux;
+            productoMatricial[i] = aux;
         }
-        return marcadoResultante;
+        return productoMatricial;
     }
 
     public static Integer[] sumarVectores(Integer[] vector1, Integer[] vector2) {

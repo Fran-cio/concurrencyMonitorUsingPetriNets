@@ -2,18 +2,16 @@ package com.bugui_soft.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class CustomLogger implements Runnable {
     private static Integer numDisp;
-    private static Integer contador;
-    private PrintWriter pw;
+    private static Integer contador = 15;
+    private Boolean esPrimera = true; //primera ejecución del run, cuando se llama del start
+    private FileWriter file;
 
     public CustomLogger() {
         try {
-            System.out.println("Entrando al constructor del logger");
-            FileWriter file = new FileWriter("Data/Log.txt");
-            pw = new PrintWriter(file);
+            file = new FileWriter("Data/Log.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -21,15 +19,29 @@ public class CustomLogger implements Runnable {
 
     @Override
     public void run() {
-        pw.println("T" + numDisp);
-        System.out.println("T" + numDisp);
+        if (!esPrimera) {
+            try {
+                if (contador == 0)
+                    file.close();
+                else {
+                    file.write("T" + numDisp);
+                    System.out.println("T" + numDisp);
+                    contador--;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        esPrimera = false;
     }
 
-    public static void  setNumDisparo(Integer numDisparo) {
+    public static void setNumDisparo(Integer numDisparo) {
         if (numDisparo == null)
             numDisp = 50;
         else
             numDisp = numDisparo;
 
     }
+
 }
