@@ -7,18 +7,12 @@ public class Politicas {
      * Devuelve la transición menos disparada
      */
     public Integer cualDisparar(Integer[] transPot) {
-        Integer posMin = 0;
-        try {
-            posMin = obtenerMenor(transPot);
-            rdp.getDispContador()[posMin]++;
-        } catch (IllegalStateException e) {
-            System.out.println("Se produjo un deadlock, revisar red de petri");
-            e.printStackTrace();
-        }
+        int posMin = 0;
+        posMin = obtenerMenor(transPot);
         return posMin;
     }
 
-    private Integer obtenerMenor(Integer[] transPot) throws IllegalStateException {
+    private Integer obtenerMenor(Integer[] transPot) {
         Integer minimo = Integer.MAX_VALUE;
         int posMin = 0;
         for (int i = 0; i < transPot.length; i++) {
@@ -27,9 +21,7 @@ public class Politicas {
                 posMin = i;
             }
         }
-        if (minimo == Integer.MAX_VALUE) {
-            throw new IllegalStateException();
-        }
+
         return posMin;
     }
 }

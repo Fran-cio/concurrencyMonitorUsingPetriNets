@@ -1,6 +1,6 @@
 package com.bugui_soft.utils;
 
-import jdk.jfr.Unsigned;
+//import jdk.jfr.Unsigned;
 
 import java.util.Arrays;
 import static com.bugui_soft.Main.logger;
@@ -80,29 +80,19 @@ public class Rdp {
     }
 
     private void actualizarTSensibilizadas() {
-        //creo un arreglo inicializado en 0 por defecto
-        int puntero = 0;
+        //creo un arreglo inicializado en 1 por defecto
         Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-        //convierto en 1, los punteros a transiciones sensibilizadas
+        //convierto en 0, los punteros a transiciones NO sensibilizadas
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {//busco por cada transición
             boolean aux = true;
-            for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si esta sensibilizada por sus plazas
+            for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si NO esta sensibilizada por sus plazas
                 //si al menos le falta un token no esta sensibilizada
-                if (mtxIncidencia[j][i] == -1){
-                    if(marcadoActual[j] < 1){
-                        nuevaTS[i] = 0;
-                    }
+                if ((mtxIncidencia[j][i] == -1) && (marcadoActual[j] < 1)) {
+                    nuevaTS[i] = 0;
+                    break;
                 }
-//                if (marcadoActual[j] >= 1 && mtxIncidencia[j][i] == -1) {
-//                    aux = false;
-//                    break;
-//                }
             }
-//            if (aux) {
-//                nuevaTS[puntero] = 1; //Tsensibilizada
-//                puntero++;
-//            }
         }
         setSensibilizadas(nuevaTS);
     }

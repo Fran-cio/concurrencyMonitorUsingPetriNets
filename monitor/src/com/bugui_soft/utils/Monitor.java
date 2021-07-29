@@ -25,9 +25,12 @@ public class Monitor {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         try {
             mutex.acquire();//entrada al monitor
+            Integer[] transPot = getTransPotencialDelOperario(tInvariantes);
 
-            while (true) {
-                Integer tDisparable = politica.cualDisparar(getTransPotencialDelOperario(tInvariantes));
+            //Si este Operario  tiene transiciones potenciales (Sensibilizadas por el marcado
+            if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
+
+                Integer tDisparable = politica.cualDisparar(transPot);
                 Boolean seDisparo = redDePetri.disparar(tDisparable);
 
                 if (!seDisparo) {
@@ -35,18 +38,15 @@ public class Monitor {
                         exit();
                         colasCondition[tDisparable].acquire();
 
-                        //Cuando me despierten intentaré disparar de nuevo!
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else {//si disparé
-                    exit();
-                    break;//me voy del monitor
                 }
             }
         } catch (InterruptedException e) {
             System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
         }
+        exit();
     }
 
     /**
@@ -54,10 +54,10 @@ public class Monitor {
      */
     private void exit() {
         Integer[] transicionesEjecutables = getTransPotencialColas();
-        boolean hayColasEsperando = Arrays.stream(transicionesEjecutables).anyMatch(n -> n > 0);
-        if (hayColasEsperando) {
+        boolean hayHilosEsperando = Arrays.stream(transicionesEjecutables).anyMatch(n -> n > 0);
+        if (hayHilosEsperando) {
             Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
-            //Le cedo el monitor
+
             colasCondition[cualDisparar].release();
         } else {
             mutex.release();
@@ -89,10 +89,7 @@ public class Monitor {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay  transiciones sensibilizadas de ese operario
-            if ((redDePetri.getSensibilizadas()[i] == 1) && (tInvariantes[i] == 1))
-                aux[i] = 1;
-            else
-                aux[i] = 0;
+            aux[i] = redDePetri.getSensibilizadas()[i] * tInvariantes[i];
         }
         return aux;
     }

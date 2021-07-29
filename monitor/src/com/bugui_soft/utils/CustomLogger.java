@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class CustomLogger implements Runnable {
     private static Integer numDisp;
-    private static Integer contador = 15;
+    private static Integer contador = 1000;
     private Boolean esPrimera = true; //primera ejecución del run, cuando se llama del start
     private FileWriter file;
 
@@ -24,7 +24,7 @@ public class CustomLogger implements Runnable {
                 if (contador == 0)
                     file.close();
                 else {
-                    file.write("T" + numDisp);
+                    file.write("T" + numDisp+" ");
                     System.out.println("T" + numDisp);
                     contador--;
                 }
