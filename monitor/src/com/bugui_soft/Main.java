@@ -17,9 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
         cargarOperarios();
-        //crear hilos
+        //crear y correr hilos
+        hilosFactory.newThread(logger).start();
+        for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
 
-        //correr hilos
     }
 
     private static void cargarOperarios() {

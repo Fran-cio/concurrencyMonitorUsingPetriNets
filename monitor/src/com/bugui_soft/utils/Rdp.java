@@ -87,7 +87,7 @@ public class Rdp {
         //convierto en 1, los punteros a transiciones sensibilizadas
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {//busco por cada transición
             boolean aux = true;
-            for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si esta sencibilizada por sus plazas
+            for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si esta sensibilizada por sus plazas
                 //si al menos le falta un token no esta sensibilizada
                 if (mtxIncidencia[j][i] == -1){
                     if(marcadoActual[j] < 1){

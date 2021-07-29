@@ -15,13 +15,13 @@ public class Productor implements Runnable {
 
     public void run() {
         while (true) {
-            Main.monitor.dispararTransicion();
-            Main.rdp.disparar(tInvariante[tActual]);
-            tActual++;
-            // verifico si estoy en la ultima transición
-            if(tActual > tInvariante[tInvariante.length-1])  {
-                tActual=tInvariante[0];
+            monitor.dispararTransicion(tInvariante);
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            // Simular realizar tarea
 
         }
 
