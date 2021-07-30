@@ -14,7 +14,7 @@ public class Rdp {
     private final Integer[] marcadoInicial; //marcado inicial
     private Integer[] marcadoActual;
     private final VectorTSensibilizadas tSensibilizadasActual;
-    private final Integer[] dispContador;
+    public static final Integer[] dispContador = new Integer[CANTIDAD_TRANSICIONES];
 
     public Rdp() {
         mtxIncidencia = new Integer[][]{
@@ -44,8 +44,7 @@ public class Rdp {
         //array de estado de sensibilización de transiciones
         Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
         tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
-
-        dispContador = new Integer[CANTIDAD_TRANSICIONES];
+        //inicializo el contador en 0
         Arrays.fill(dispContador, 0);
     }
 
@@ -70,6 +69,7 @@ public class Rdp {
         Arrays.fill(vecDisparar, 0);
         vecDisparar[disparo] = 1;
         try {
+            for (int i:dispContador ) {System.out.print(i+" "); }
             System.out.println(Arrays.toString(marcadoActual));
             marcadoActual = sumarVectores(marcadoActual, productoMatricial(mtxIncidencia, vecDisparar));
             System.out.println(Arrays.toString(marcadoActual));
