@@ -93,4 +93,8 @@ public class Monitor {
         }
         return aux;
     }
+
+    public Politicas getPolitica() {
+        return politica;
+    }
 }

@@ -1,9 +1,11 @@
 package com.bugui_soft.utils;
 
-//import jdk.jfr.Unsigned;
 
 import java.util.Arrays;
+import java.util.List;
+
 import static com.bugui_soft.Main.logger;
+import static com.bugui_soft.Main.monitor;
 import static com.bugui_soft.utils.Constantes.*;
 import static com.bugui_soft.utils.CustomLogger.setNumDisparo;
 import static com.bugui_soft.utils.Utilidades.productoMatricial;
@@ -12,9 +14,9 @@ import static com.bugui_soft.utils.Utilidades.sumarVectores;
 public class Rdp {
     private final Integer[][] mtxIncidencia; //matriz de incidencia
     private final Integer[] marcadoInicial; //marcado inicial
-    private Integer[] marcadoActual;
+    private static Integer[] marcadoActual;
     private final VectorTSensibilizadas tSensibilizadasActual;
-    public static final Integer[] dispContador = new Integer[CANTIDAD_TRANSICIONES];
+
 
     public Rdp() {
         mtxIncidencia = new Integer[][]{
@@ -39,13 +41,13 @@ public class Rdp {
 
 
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
-        marcadoActual = marcadoInicial;
+        marcadoActual = marcadoInicial.clone();
 
         //array de estado de sensibilización de transiciones
         Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
         tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
         //inicializo el contador en 0
-        Arrays.fill(dispContador, 0);
+
     }
 
     /**
@@ -56,7 +58,7 @@ public class Rdp {
         if (tSensibilizadasActual.estaSensibilizado(disparo)) {
             actualizarMarcado(disparo);
             actualizarTSensibilizadas();
-            dispContador[disparo]++;
+            monitor.getPolitica().incrementarTI(disparo);
             setNumDisparo(disparo);
             logger.run();
             return true;
@@ -69,7 +71,6 @@ public class Rdp {
         Arrays.fill(vecDisparar, 0);
         vecDisparar[disparo] = 1;
         try {
-            for (int i:dispContador ) {System.out.print(i+" "); }
             System.out.println(Arrays.toString(marcadoActual));
             marcadoActual = sumarVectores(marcadoActual, productoMatricial(mtxIncidencia, vecDisparar));
             System.out.println(Arrays.toString(marcadoActual));
@@ -105,8 +106,12 @@ public class Rdp {
         return tSensibilizadasActual.getSensibilizada();
     }
 
-    public Integer[] getDispContador() {
-        return dispContador;
+    public Integer[] getMarcadoInicial() {
+        return marcadoInicial;
+    }
+
+    public Integer[] getMarcadoActual() {
+        return marcadoActual;
     }
 }
 
