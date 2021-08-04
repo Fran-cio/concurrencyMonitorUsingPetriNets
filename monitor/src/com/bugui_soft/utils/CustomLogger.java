@@ -26,15 +26,14 @@ public class CustomLogger implements Runnable {
             try {
                 Integer numDisp = exchanger.exchange(null);
                 //condicion de llegada para el log
-                boolean isHome= Arrays.equals(Main.rdp.getMarcadoActual(),Main.rdp.getMarcadoInicial());
-                if (contador <= 0 && isHome)
-                {   file.write("T" + numDisp+" ");
+                //cuando se cumple un ciclo es true, de esta manera no quedan transiciones sueltas que nos rompa la expresión regular
+                boolean isHome = Arrays.equals(Main.rdp.getMarcadoActual(), Main.rdp.getMarcadoInicial());
+                if (contador <= 0 && isHome) {
+                    file.write("T" + numDisp + " ");
                     file.close();
-                System.out.println(Main.rdp.getMarcadoActual()[0]+""+Main.rdp.getMarcadoActual()[11]);}
-
-                else {
-                    System.out.println(Main.rdp.getMarcadoActual()[0]+""+Main.rdp.getMarcadoActual()[11]);
-                    file.write("T" + numDisp+" ");
+                    Main.finalizarPrograma();
+                } else {
+                    file.write("T" + numDisp + " ");
                     System.out.println("T" + numDisp);
                     contador--;
                 }
@@ -43,6 +42,5 @@ public class CustomLogger implements Runnable {
                 e.printStackTrace();
             }
         }
-        esPrimera = false;
     }
 }
