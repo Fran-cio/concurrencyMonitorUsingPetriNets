@@ -2,12 +2,9 @@ package com.bugui_soft.utils;
 
 
 import java.util.Arrays;
-import java.util.List;
 
-import static com.bugui_soft.Main.logger;
-import static com.bugui_soft.Main.monitor;
+import static com.bugui_soft.Main.*;
 import static com.bugui_soft.utils.Constantes.*;
-import static com.bugui_soft.utils.CustomLogger.setNumDisparo;
 import static com.bugui_soft.utils.Utilidades.productoMatricial;
 import static com.bugui_soft.utils.Utilidades.sumarVectores;
 
@@ -59,9 +56,12 @@ public class Rdp {
             actualizarMarcado(disparo);
             actualizarTSensibilizadas();
             monitor.getPolitica().incrementarTI(disparo);
-            setNumDisparo(disparo);
-            logger.run();
-            return true;
+            try {
+                exchanger.exchange(disparo);
+                return true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -71,9 +71,7 @@ public class Rdp {
         Arrays.fill(vecDisparar, 0);
         vecDisparar[disparo] = 1;
         try {
-            System.out.println(Arrays.toString(marcadoActual));
             marcadoActual = sumarVectores(marcadoActual, productoMatricial(mtxIncidencia, vecDisparar));
-            System.out.println(Arrays.toString(marcadoActual));
         } catch (IndexOutOfBoundsException e) {
             System.out.println("El valor de disparo es más grande que el número de transiciones");
             e.printStackTrace();
@@ -86,7 +84,6 @@ public class Rdp {
 
         //convierto en 0, los punteros a transiciones NO sensibilizadas
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {//busco por cada transición
-            boolean aux = true;
             for (int j = 0; j < CANTIDAD_PLAZAS; j++) { //si NO esta sensibilizada por sus plazas
                 //si al menos le falta un token no esta sensibilizada
                 if ((mtxIncidencia[j][i] == -1) && (marcadoActual[j] < 1)) {

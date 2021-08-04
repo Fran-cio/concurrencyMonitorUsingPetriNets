@@ -22,7 +22,6 @@ public class Productor implements Runnable {
                 e.printStackTrace();
             }
             // Simular realizar tarea
-
         }
 
     }

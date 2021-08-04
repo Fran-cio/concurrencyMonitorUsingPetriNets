@@ -37,7 +37,6 @@ public class Monitor {
                     try {
                         exit();
                         colasCondition[tDisparable].acquire();
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
