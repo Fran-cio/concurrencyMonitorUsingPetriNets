@@ -73,7 +73,7 @@ public class Rdp {
                 {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
         */
 
-        /*
+
         System.out.println("mtx Incidencia:");
         for(int i=0; i<arcosEntrantes.size();i++){
             for(int j=0; j<arcosSalientes.size();j++){
@@ -81,7 +81,7 @@ public class Rdp {
             }
             System.out.println(" ");
         }
-        */
+
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
         marcadoActual = marcadoInicial.clone();
 
