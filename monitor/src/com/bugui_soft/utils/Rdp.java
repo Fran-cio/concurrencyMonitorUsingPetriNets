@@ -2,20 +2,56 @@ package com.bugui_soft.utils;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 
-import static com.bugui_soft.Main.*;
-import static com.bugui_soft.utils.Constantes.*;
-import static com.bugui_soft.utils.Utilidades.productoMatricial;
-import static com.bugui_soft.utils.Utilidades.sumarVectores;
+import static com.bugui_soft.Main.exchanger;
+import static com.bugui_soft.Main.monitor;
+import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
+import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
+import static com.bugui_soft.utils.Utilidades.*;
 
 public class Rdp {
+
+    private final HashMap<Integer, Integer[]> arcosEntrantes;
+    private final HashMap<Integer, Integer[]> arcosSalientes;
+    private final Integer[][] mtxEntrantes; //matriz de incidencia
+    private final Integer[][] mtxSalientes; //matriz de incidencia
     private final Integer[][] mtxIncidencia; //matriz de incidencia
     private final Integer[] marcadoInicial; //marcado inicial
     private static Integer[] marcadoActual;
     private final VectorTSensibilizadas tSensibilizadasActual;
 
-
     public Rdp() {
+
+        arcosEntrantes = new HashMap<>();
+        arcosSalientes = new HashMap<>();
+
+        genArcos();
+
+        mtxEntrantes = new Integer[arcosEntrantes.size()][arcosSalientes.size()];
+        mtxSalientes = new Integer[arcosEntrantes.size()][arcosSalientes.size()];
+
+        genMtxEntrada();
+        genMtxSalida();
+        //TODO: Cuando vean las cosas borrar comentarios
+        /*
+        System.out.println("mtx entrada:");
+        for(int i=0; i<arcosEntrantes.size();i++){
+            for(int j=0; j<arcosSalientes.size();j++){
+                System.out.print("["+mtxEntrantes[i][j]+"]");
+            }
+            System.out.println(" ");
+        }
+        System.out.println("mtx salida:");
+        for(int i=0; i<arcosEntrantes.size();i++){
+            for(int j=0; j<arcosSalientes.size();j++){
+                System.out.print("["+mtxSalientes[i][j]+"]");
+            }
+            System.out.println(" ");
+        }
+        */
+        mtxIncidencia = restarMatrices(mtxSalientes, mtxEntrantes);
+        /*
         mtxIncidencia = new Integer[][]{
                 {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
                 {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -35,16 +71,87 @@ public class Rdp {
                 {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
                 {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
                 {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
+        */
 
-
+        /*
+        System.out.println("mtx Incidencia:");
+        for(int i=0; i<arcosEntrantes.size();i++){
+            for(int j=0; j<arcosSalientes.size();j++){
+                System.out.print("["+mtxIncidencia[i][j]+"]");
+            }
+            System.out.println(" ");
+        }
+        */
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
         marcadoActual = marcadoInicial.clone();
 
         //array de estado de sensibilización de transiciones
-        Integer[] tSensibilizadasInicial = new Integer[]{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0};
+        Integer[] tSensibilizadasInicial = genTSensibilizadas();
         tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
         //inicializo el contador en 0
 
+    }
+
+    private void genMtxEntrada() {
+
+        for (int i = 0; i < arcosEntrantes.size(); i++) {
+            for (int j = 0; j < arcosSalientes.size(); j++) {
+                mtxEntrantes[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < arcosEntrantes.size(); i++) {
+            for (int j = 0; j < arcosEntrantes.get(i).length; j++) {
+                mtxEntrantes[i][arcosEntrantes.get(i)[j]] = 1;
+            }
+        }
+    }
+
+    private void genMtxSalida() {
+
+        for (int i = 0; i < arcosEntrantes.size(); i++) {
+            for (int j = 0; j < arcosSalientes.size(); j++) {
+                mtxSalientes[i][j] = 0;
+            }
+        }
+
+        for (int i = 0; i < arcosSalientes.size(); i++) {
+            for (int j = 0; j < arcosSalientes.get(i).length; j++) {
+                mtxSalientes[arcosSalientes.get(i)[j]][i] = 1;
+            }
+        }
+    }
+
+    private void genArcos() {
+        arcosEntrantes.put(0, new Integer[]{0});
+        arcosEntrantes.put(1, new Integer[]{1, 2});
+        arcosEntrantes.put(2, new Integer[]{0});
+        arcosEntrantes.put(3, new Integer[]{1});
+        arcosEntrantes.put(4, new Integer[]{10});
+        arcosEntrantes.put(5, new Integer[]{3});
+        arcosEntrantes.put(6, new Integer[]{2, 8});
+        arcosEntrantes.put(7, new Integer[]{9});
+        arcosEntrantes.put(8, new Integer[]{4});
+        arcosEntrantes.put(9, new Integer[]{3, 7});
+        arcosEntrantes.put(10, new Integer[]{8});
+        arcosEntrantes.put(11, new Integer[]{6});
+        arcosEntrantes.put(12, new Integer[]{5});
+        arcosEntrantes.put(13, new Integer[]{4, 6});
+        arcosEntrantes.put(14, new Integer[]{7});
+        arcosEntrantes.put(15, new Integer[]{3, 6});
+        arcosEntrantes.put(16, new Integer[]{2, 7});
+        arcosEntrantes.put(17, new Integer[]{2, 6});
+
+        arcosSalientes.put(0, new Integer[]{1});
+        arcosSalientes.put(1, new Integer[]{2, 4});
+        arcosSalientes.put(2, new Integer[]{5, 2});
+        arcosSalientes.put(3, new Integer[]{8, 6, 16, 17});
+        arcosSalientes.put(4, new Integer[]{9, 12, 15});
+        arcosSalientes.put(5, new Integer[]{0, 13});
+        arcosSalientes.put(6, new Integer[]{14});
+        arcosSalientes.put(7, new Integer[]{10, 13, 15, 17});
+        arcosSalientes.put(8, new Integer[]{7, 9, 16});
+        arcosSalientes.put(9, new Integer[]{6, 11});
+        arcosSalientes.put(10, new Integer[]{0, 3});
     }
 
     /**
@@ -79,6 +186,10 @@ public class Rdp {
     }
 
     private void actualizarTSensibilizadas() {
+        setSensibilizadas(genTSensibilizadas());
+    }
+
+    private Integer[] genTSensibilizadas() {
         //creo un arreglo inicializado en 1 por defecto
         Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
@@ -92,7 +203,7 @@ public class Rdp {
                 }
             }
         }
-        setSensibilizadas(nuevaTS);
+        return nuevaTS;
     }
 
     private void setSensibilizadas(Integer[] nuevaTS) {
@@ -110,5 +221,6 @@ public class Rdp {
     public Integer[] getMarcadoActual() {
         return marcadoActual;
     }
+
 }
 
