@@ -19,6 +19,7 @@ public class Rdp {
     private final Integer[][] mtxIncidencia; //matriz de incidencia
     private final Integer[] marcadoInicial; //marcado inicial
     private static Integer[] marcadoActual;
+    private static Long[] timeStamp;//X0, tiempo de sensibilizado inicial
     private final VectorTSensibilizadas tSensibilizadasActual;
 
     public Rdp() {
@@ -94,6 +95,7 @@ public class Rdp {
         arcosEntrantes.put(16, new Integer[]{2, 7});
         arcosEntrantes.put(17, new Integer[]{2, 6});
 
+        //transiciones -> plazas
         arcosSalientes.put(0, new Integer[]{1});
         arcosSalientes.put(1, new Integer[]{2, 4});
         arcosSalientes.put(2, new Integer[]{5, 2});
@@ -139,7 +141,10 @@ public class Rdp {
     }
 
     private void actualizarTSensibilizadas() {
-        setSensibilizadas(genTSensibilizadas());
+        Integer[] nuevoTS= genTSensibilizadas();
+        setSensibilizadas(nuevoTS);
+        //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
+        setTimeStamp(nuevoTS);
     }
 
     private Integer[] genTSensibilizadas() {
@@ -156,6 +161,7 @@ public class Rdp {
                 }
             }
         }
+
         return nuevaTS;
     }
 

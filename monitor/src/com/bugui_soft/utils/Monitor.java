@@ -69,7 +69,7 @@ public class Monitor {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay hilos esperando y transiciones sensibilizadas
-            if ((colasCondition[i].getQueueLength() != 0) && (Main.rdp.getSensibilizadas()[i] == 1))
+            if ((colasCondition[i].getQueueLength() != 0) && (rdp.getSensibilizadas()[i] == 1))
                 aux[i] = 1;
             else
                 aux[i] = 0;

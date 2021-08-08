@@ -33,9 +33,24 @@ public class VectorTSensibilizadas {
     }
 
     public boolean estaSensibilizado(Integer disparo) {
-        if (sensibilizada[disparo] > 0) {
-            return true;
-            //TODO: chequear ventana de tiempo
+        if (sensibilizada[disparo] > 0) { //sensibilizado por tokens
+            Long[] timeStamp = Rdp.getTimeStamp();
+            long tiempoActual = System.currentTimeMillis();
+            long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
+            long tiempoMaxVentana = timeStamp[disparo] + beta[disparo] + 100000000;
+            boolean estamosEnVentana = tiempoActual >= tiempoMinVentana && tiempoActual <= tiempoMaxVentana;
+            boolean antesDeAlfa = tiempoActual < tiempoMinVentana;
+
+            if (estamosEnVentana) return true;
+
+            getMutex().release();
+
+            try {
+                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual);
+            } catch (TimeoutException e) {
+                System.out.println("El hilo " + Thread.currentThread() + " se pasó la ventana de tiempo");
+                sensibilizada[disparo] = 0;
+            }
         }
         return false;
     }
