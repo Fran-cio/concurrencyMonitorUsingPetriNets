@@ -1,17 +1,14 @@
 package com.bugui_soft.utils;
 
-import com.bugui_soft.Main;
-
 import java.util.Arrays;
 import java.util.concurrent.*;
-
+import static com.bugui_soft.Main.rdp;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 
 public class Monitor {
     private final Politicas politica;
-    private final Semaphore mutex; // "cola" de entrada al monitor
+    private static final Semaphore mutex = new Semaphore(1); // "cola" de entrada al monitor
     private final Semaphore[] colasCondition; // Array con las colas de condiciones
-    //private final Rdp redDePetri; TODO: revisar esto, por alguna razon hay 2 instancias.
 
     public Monitor() {
         politica = new Politicas();
@@ -19,8 +16,6 @@ public class Monitor {
         colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
             colasCondition[i] = new Semaphore(0);
-
-    //    redDePetri = new Rdp();
     }
 
     public synchronized void dispararTransicion(Integer[] tInvariantes) {
@@ -33,7 +28,7 @@ public class Monitor {
             if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
 
                 Integer tDisparable = politica.cualDisparar(transPot);
-                Boolean seDisparo = Main.rdp.disparar(tDisparable);
+                Boolean seDisparo = rdp.disparar(tDisparable);
 
                 if (!seDisparo) {
                     try {
@@ -90,12 +85,16 @@ public class Monitor {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay  transiciones sensibilizadas de ese operario
-            aux[i] = Main.rdp.getSensibilizadas()[i] * tInvariantes[i];
+            aux[i] = rdp.getSensibilizadas()[i] * tInvariantes[i];
         }
         return aux;
     }
 
     public Politicas getPolitica() {
         return politica;
+    }
+
+    public static Semaphore getMutex() {
+        return mutex;
     }
 }

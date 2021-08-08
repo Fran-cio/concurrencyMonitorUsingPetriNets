@@ -6,6 +6,8 @@ import java.util.Arrays;
 import com.bugui_soft.Main;
 import static com.bugui_soft.utils.Constantes.CONTADOR_DEL_RPOGRAMA;
 import static com.bugui_soft.Main.exchanger;
+import static com.bugui_soft.Main.rdp;
+
 
 public class CustomLogger implements Runnable {
     private static Integer contador = CONTADOR_DEL_RPOGRAMA;
@@ -27,7 +29,7 @@ public class CustomLogger implements Runnable {
                 Integer numDisp = exchanger.exchange(null);
                 //condicion de llegada para el log
                 //cuando se cumple un ciclo es true, de esta manera no quedan transiciones sueltas que nos rompa la expresión regular
-                boolean isHome = Arrays.equals(Main.rdp.getMarcadoActual(), Main.rdp.getMarcadoInicial());
+                boolean isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
                 if (contador <= 0 && isHome) {
                     file.write("T" + numDisp + " ");
                     file.close();

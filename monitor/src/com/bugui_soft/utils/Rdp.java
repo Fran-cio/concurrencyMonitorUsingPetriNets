@@ -22,7 +22,6 @@ public class Rdp {
     private final VectorTSensibilizadas tSensibilizadasActual;
 
     public Rdp() {
-
         arcosEntrantes = new HashMap<>();
         arcosSalientes = new HashMap<>();
 
@@ -33,67 +32,21 @@ public class Rdp {
 
         genMtxEntrada();
         genMtxSalida();
-        //TODO: Cuando vean las cosas borrar comentarios
-        /*
-        System.out.println("mtx entrada:");
-        for(int i=0; i<arcosEntrantes.size();i++){
-            for(int j=0; j<arcosSalientes.size();j++){
-                System.out.print("["+mtxEntrantes[i][j]+"]");
-            }
-            System.out.println(" ");
-        }
-        System.out.println("mtx salida:");
-        for(int i=0; i<arcosEntrantes.size();i++){
-            for(int j=0; j<arcosSalientes.size();j++){
-                System.out.print("["+mtxSalientes[i][j]+"]");
-            }
-            System.out.println(" ");
-        }
-        */
+
         mtxIncidencia = restarMatrices(mtxSalientes, mtxEntrantes);
-        /*
-        mtxIncidencia = new Integer[][]{
-                {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-                {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-                {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
-                {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
-                {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
-                {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
-                {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
-                {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
-                {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
-        */
-
-
-        System.out.println("mtx Incidencia:");
-        for(int i=0; i<arcosEntrantes.size();i++){
-            for(int j=0; j<arcosSalientes.size();j++){
-                System.out.print("["+mtxIncidencia[i][j]+"]");
-            }
-            System.out.println(" ");
-        }
-
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
         marcadoActual = marcadoInicial.clone();
 
         //array de estado de sensibilización de transiciones
         Integer[] tSensibilizadasInicial = genTSensibilizadas();
         tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
-        //inicializo el contador en 0
-
+        timeStamp = new Long[CANTIDAD_TRANSICIONES];
+        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
+            timeStamp[i] = System.currentTimeMillis();
+        }
     }
 
     private void genMtxEntrada() {
-
         for (int i = 0; i < arcosEntrantes.size(); i++) {
             for (int j = 0; j < arcosSalientes.size(); j++) {
                 mtxEntrantes[i][j] = 0;
@@ -107,7 +60,6 @@ public class Rdp {
     }
 
     private void genMtxSalida() {
-
         for (int i = 0; i < arcosEntrantes.size(); i++) {
             for (int j = 0; j < arcosSalientes.size(); j++) {
                 mtxSalientes[i][j] = 0;
@@ -122,6 +74,7 @@ public class Rdp {
     }
 
     private void genArcos() {
+        //plazas -> transiciones
         arcosEntrantes.put(0, new Integer[]{0});
         arcosEntrantes.put(1, new Integer[]{1, 2});
         arcosEntrantes.put(2, new Integer[]{0});
@@ -222,5 +175,19 @@ public class Rdp {
         return marcadoActual;
     }
 
+    /**
+     * Actualizar el tiempo de sensibilizado inicial
+     **/
+    public void setTimeStamp(Integer[] nuevaTS) {
+        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
+            if (!nuevaTS[i].equals(tSensibilizadasActual.getSensibilizada()[i])) {
+                timeStamp[i] = System.currentTimeMillis();
+            }
+        }
+    }
+
+    public static Long[] getTimeStamp() {
+        return timeStamp;
+    }
 }
 
