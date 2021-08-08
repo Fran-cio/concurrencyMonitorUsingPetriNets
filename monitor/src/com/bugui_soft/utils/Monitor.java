@@ -12,7 +12,7 @@ public class Monitor {
 
     public Monitor() {
         politica = new Politicas();
-        mutex = new Semaphore(1);
+        //mutex = new Semaphore(1);
         colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
             colasCondition[i] = new Semaphore(0);
