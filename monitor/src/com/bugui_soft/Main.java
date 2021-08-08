@@ -1,9 +1,8 @@
 package com.bugui_soft;
 
 import java.util.ArrayList;
-
+import java.util.concurrent.Exchanger;
 import com.bugui_soft.utils.*;
-
 import static com.bugui_soft.utils.Constantes.*;
 
 public class Main {
@@ -14,13 +13,13 @@ public class Main {
     public static final Monitor monitor = new Monitor();
     public static final Rdp rdp = new Rdp();
     public static final CustomLogger logger = new CustomLogger();
+    public static final Exchanger<Integer> exchanger = new Exchanger<>();
 
     public static void main(String[] args) {
         cargarOperarios();
         //crear y correr hilos
         hilosFactory.newThread(logger).start();
         for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
-
     }
 
     private static void cargarOperarios() {
@@ -32,5 +31,10 @@ public class Main {
 
         operarios.add(operarioFactory.getOperario(DESCARTADOR));
         operarios.add(operarioFactory.getOperario(CALIDAD));
+    }
+
+    public static void finalizarPrograma() {
+        System.out.println("Se acabó el programa");
+        System.exit(0); //TODO: cambiar a un Interrupt, y finalizar hilo por hilo
     }
 }

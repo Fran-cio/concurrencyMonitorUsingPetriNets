@@ -12,4 +12,5 @@ public final class Constantes {
     public static final Integer CANTIDAD_CALIDAD = 1;
     public static final Integer CANTIDAD_PLAZAS = 18;
     public static final Integer CANTIDAD_TRANSICIONES = 11;
+    public static final Integer CONTADOR_DEL_RPOGRAMA = 10;
 }

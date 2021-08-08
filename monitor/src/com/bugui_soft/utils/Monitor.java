@@ -37,7 +37,6 @@ public class Monitor {
                     try {
                         exit();
                         colasCondition[tDisparable].acquire();
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -92,5 +91,9 @@ public class Monitor {
             aux[i] = redDePetri.getSensibilizadas()[i] * tInvariantes[i];
         }
         return aux;
+    }
+
+    public Politicas getPolitica() {
+        return politica;
     }
 }
