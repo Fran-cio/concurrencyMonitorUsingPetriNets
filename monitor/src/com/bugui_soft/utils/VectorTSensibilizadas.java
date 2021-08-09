@@ -37,16 +37,19 @@ public class VectorTSensibilizadas {
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();
             long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
-            long tiempoMaxVentana = timeStamp[disparo] + beta[disparo] + 100000000;
+            long tiempoMaxVentana = timeStamp[disparo] + beta[disparo];
             boolean estamosEnVentana = tiempoActual >= tiempoMinVentana && tiempoActual <= tiempoMaxVentana;
             boolean antesDeAlfa = tiempoActual < tiempoMinVentana;
 
             if (estamosEnVentana) return true;
 
-            getMutex().release();
+            /**TODO: Borrar comentario
+             *Movi el release adentro del metodo, faltaba el acquire y el return, ahora eso anda bien
+            **/
 
             try {
                 estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual);
+                return true;
             } catch (TimeoutException e) {
                 System.out.println("El hilo " + Thread.currentThread() + " se pasó la ventana de tiempo");
                 sensibilizada[disparo] = 0;
@@ -60,9 +63,15 @@ public class VectorTSensibilizadas {
  * */
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException {
         if (antesDeAlfa) {
+            getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                getMutex().acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

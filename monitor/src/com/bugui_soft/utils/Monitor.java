@@ -31,6 +31,29 @@ public class Monitor {
                 Boolean seDisparo = rdp.disparar(tDisparable);
 
                 if (!seDisparo) {
+                    /**TODO: Borrar comentario
+                       *Esta parte del código anda mal.
+                     * 1.Considero necesario agregar un actualizarTSensibilizadas() aca adentro para evitar que se acumulen
+                     *  los tiempos
+                     * 2.Al ejecutar el acquire de la cola de condicion el programa muere por completo. No se si hay
+                     *  algo mal con los semáforos o que dentro de exit() nunca sucede el release como deberia
+                     * 3.El método getPotencialColas nunca he visto que devuelva algo distinto a todos 0, lo cual me
+                     *  hace que nunca suceda el release. No se si el error esta ahi, ya que el programa no me permite
+                     *  ver mas alla del acquire del semaforo de condiciones
+                     *
+                     * Situaciones que probe:
+                     * -Sacando el acquire() y el exit() de las lineas 48,49. Se produce un deadlock
+                     *  porque los timestamp no se actualizan y se queda sin avanzar
+                     * -Poniendo ademas de lo anterior, el metodo actualizarTSensibilizadas() (Poniendolo publico) se solu
+                     *  ciona el problema y el programa se ejecuta bien, sigue sucediendo que varias veces el beta se supera,
+                     *  pero el programa sigue su curso.
+                     *
+                     *  El beta esta bajo lo cual lleva a que se de esta situacion, podemos dejarlo alto y el programa se
+                     *  ejecuta bien. De todas formas esto no quita una parte del codigo falla, es decir, que las colasCondicion
+                     *  no andan, asi que hay que revisar que sucede o acomodar el proyecto para que no esten (aunque me parece
+                     *  importante que esten porque hace a la escencia del monitor en primera instacia ademas de que no tiene
+                     *  porque no andar)
+                     **/
                     try {
                         exit();
                         colasCondition[tDisparable].acquire();

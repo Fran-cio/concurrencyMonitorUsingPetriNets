@@ -142,9 +142,15 @@ public class Rdp {
 
     private void actualizarTSensibilizadas() {
         Integer[] nuevoTS= genTSensibilizadas();
-        setSensibilizadas(nuevoTS);
+
+        /**TODO: borrar comentario
+         *estabamos calculando el timestamp con los 2 arreglos iguales, asi que les cambie el orden. ahora esto anda bien.
+        **/
+
         //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
         setTimeStamp(nuevoTS);
+        setSensibilizadas(nuevoTS);
+
     }
 
     private Integer[] genTSensibilizadas() {
