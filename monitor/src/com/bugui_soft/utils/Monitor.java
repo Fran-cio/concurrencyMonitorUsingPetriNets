@@ -18,7 +18,7 @@ public class Monitor {
             colasCondition[i] = new Semaphore(0);
     }
 
-    public synchronized void dispararTransicion(Integer[] tInvariantes) {
+    public void dispararTransicion(Integer[] tInvariantes) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         try {
             mutex.acquire();//entrada al monitor
@@ -32,6 +32,8 @@ public class Monitor {
 
                 if (!seDisparo) {
                     /**TODO: Borrar comentario
+                     * Update: Se soluciono sacando el Synchronized en la entrada del metodo.
+                     *
                        *Esta parte del código anda mal.
                      * 1.Considero necesario agregar un actualizarTSensibilizadas() aca adentro para evitar que se acumulen
                      *  los tiempos
@@ -53,8 +55,11 @@ public class Monitor {
                      *  no andan, asi que hay que revisar que sucede o acomodar el proyecto para que no esten (aunque me parece
                      *  importante que esten porque hace a la escencia del monitor en primera instacia ademas de que no tiene
                      *  porque no andar)
+                     *
+                     *  Update: Se soluciono sacando el Synchronized en la entrada del metodo.
                      **/
                     try {
+                        rdp.actualizarTSensibilizadas();
                         exit();
                         colasCondition[tDisparable].acquire();
                     } catch (InterruptedException e) {

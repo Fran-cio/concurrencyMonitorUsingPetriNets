@@ -17,8 +17,8 @@ public class VectorTSensibilizadas {
 
         Random rd = new Random();
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            alfa[i] = rd.nextInt(200);
-            beta[i] = alfa[i] + rd.nextInt(500);
+            alfa[i] = rd.nextInt(2000);
+            beta[i] = alfa[i] + rd.nextInt(5000);
         }
 
         this.sensibilizada = transiciones;
@@ -33,6 +33,10 @@ public class VectorTSensibilizadas {
     }
 
     public boolean estaSensibilizado(Integer disparo) {
+        /**TODO: Borrar comentario
+         *Considero necesario aplicar el booleano esperando
+         * ya que aca se encuentran muchos hilos despues de sacar el synchronized
+         **/
         if (sensibilizada[disparo] > 0) { //sensibilizado por tokens
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();

@@ -140,7 +140,7 @@ public class Rdp {
         }
     }
 
-    private void actualizarTSensibilizadas() {
+    public void actualizarTSensibilizadas() {
         Integer[] nuevoTS= genTSensibilizadas();
 
         /**TODO: borrar comentario
