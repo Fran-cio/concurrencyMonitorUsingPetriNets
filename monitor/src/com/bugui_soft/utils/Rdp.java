@@ -12,10 +12,6 @@ import static com.bugui_soft.utils.Utilidades.*;
 
 public class Rdp {
 
-    private final HashMap<Integer, Integer[]> arcosEntrantes;
-    private final HashMap<Integer, Integer[]> arcosSalientes;
-    private final Integer[][] mtxEntrantes; //matriz de incidencia
-    private final Integer[][] mtxSalientes; //matriz de incidencia
     private final Integer[][] mtxIncidencia; //matriz de incidencia
     private final Integer[] marcadoInicial; //marcado inicial
     private static Integer[] marcadoActual;
@@ -23,18 +19,27 @@ public class Rdp {
     private final VectorTSensibilizadas tSensibilizadasActual;
 
     public Rdp() {
-        arcosEntrantes = new HashMap<>();
-        arcosSalientes = new HashMap<>();
 
-        genArcos();
+        mtxIncidencia = new Integer[][]{
+                {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
+                {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
+                {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
+                {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
+                {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
+                {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
+                {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
+                {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
 
-        mtxEntrantes = new Integer[arcosEntrantes.size()][arcosSalientes.size()];
-        mtxSalientes = new Integer[arcosEntrantes.size()][arcosSalientes.size()];
-
-        genMtxEntrada();
-        genMtxSalida();
-
-        mtxIncidencia = restarMatrices(mtxSalientes, mtxEntrantes);
         marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
         marcadoActual = marcadoInicial.clone();
 
@@ -45,68 +50,6 @@ public class Rdp {
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             timeStamp[i] = System.currentTimeMillis();
         }
-    }
-
-    private void genMtxEntrada() {
-        for (int i = 0; i < arcosEntrantes.size(); i++) {
-            for (int j = 0; j < arcosSalientes.size(); j++) {
-                mtxEntrantes[i][j] = 0;
-            }
-        }
-        for (int i = 0; i < arcosEntrantes.size(); i++) {
-            for (int j = 0; j < arcosEntrantes.get(i).length; j++) {
-                mtxEntrantes[i][arcosEntrantes.get(i)[j]] = 1;
-            }
-        }
-    }
-
-    private void genMtxSalida() {
-        for (int i = 0; i < arcosEntrantes.size(); i++) {
-            for (int j = 0; j < arcosSalientes.size(); j++) {
-                mtxSalientes[i][j] = 0;
-            }
-        }
-
-        for (int i = 0; i < arcosSalientes.size(); i++) {
-            for (int j = 0; j < arcosSalientes.get(i).length; j++) {
-                mtxSalientes[arcosSalientes.get(i)[j]][i] = 1;
-            }
-        }
-    }
-
-    private void genArcos() {
-        //plazas -> transiciones
-        arcosEntrantes.put(0, new Integer[]{0});
-        arcosEntrantes.put(1, new Integer[]{1, 2});
-        arcosEntrantes.put(2, new Integer[]{0});
-        arcosEntrantes.put(3, new Integer[]{1});
-        arcosEntrantes.put(4, new Integer[]{10});
-        arcosEntrantes.put(5, new Integer[]{3});
-        arcosEntrantes.put(6, new Integer[]{2, 8});
-        arcosEntrantes.put(7, new Integer[]{9});
-        arcosEntrantes.put(8, new Integer[]{4});
-        arcosEntrantes.put(9, new Integer[]{3, 7});
-        arcosEntrantes.put(10, new Integer[]{8});
-        arcosEntrantes.put(11, new Integer[]{6});
-        arcosEntrantes.put(12, new Integer[]{5});
-        arcosEntrantes.put(13, new Integer[]{4, 6});
-        arcosEntrantes.put(14, new Integer[]{7});
-        arcosEntrantes.put(15, new Integer[]{3, 6});
-        arcosEntrantes.put(16, new Integer[]{2, 7});
-        arcosEntrantes.put(17, new Integer[]{2, 6});
-
-        //transiciones -> plazas
-        arcosSalientes.put(0, new Integer[]{1});
-        arcosSalientes.put(1, new Integer[]{2, 4});
-        arcosSalientes.put(2, new Integer[]{5, 2});
-        arcosSalientes.put(3, new Integer[]{8, 6, 16, 17});
-        arcosSalientes.put(4, new Integer[]{9, 12, 15});
-        arcosSalientes.put(5, new Integer[]{0, 13});
-        arcosSalientes.put(6, new Integer[]{14});
-        arcosSalientes.put(7, new Integer[]{10, 13, 15, 17});
-        arcosSalientes.put(8, new Integer[]{7, 9, 16});
-        arcosSalientes.put(9, new Integer[]{6, 11});
-        arcosSalientes.put(10, new Integer[]{0, 3});
     }
 
     /**
