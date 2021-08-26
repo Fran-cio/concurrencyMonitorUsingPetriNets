@@ -28,15 +28,4 @@ public class Utilidades {
         return resultante;
     }
 
-    public static Integer[][] restarMatrices(Integer[][] matriz1, Integer[][] matriz2) {
-        Integer[][] resultante = new Integer[CANTIDAD_PLAZAS][CANTIDAD_TRANSICIONES];
-        for (int i = 0; i < CANTIDAD_PLAZAS; i++) {
-            for (int j = 0; j < CANTIDAD_TRANSICIONES; j++) {
-                resultante[i][j] = matriz1[i][j] - matriz2[i][j];
-            }
-        }
-        return resultante;
-    }
-
-
 }

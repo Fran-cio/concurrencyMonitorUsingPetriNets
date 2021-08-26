@@ -65,20 +65,22 @@ public class VectorTSensibilizadas {
 /**Espera el tiempo necesario para disparar en caso de superar la ventana.
  * @exception TimeoutException porque superó el tiempo máximo de la ventana.
  * */
+//TODO:las lineas 71 y 78/83 estan comentadas para evitar deadlock, hay que revisar como lo solucionamos
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException {
         if (antesDeAlfa) {
-            getMutex().release();
+            //getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            try {
+            /*try {
                 getMutex().acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            */
         } else {
             throw new TimeoutException();
         }
