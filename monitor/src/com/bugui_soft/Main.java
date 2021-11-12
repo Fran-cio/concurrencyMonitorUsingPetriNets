@@ -7,12 +7,12 @@ import static com.bugui_soft.utils.Constantes.*;
 
 public class Main {
     //crear el monitor
-    private static final OperarioFactory operarioFactory = new OperarioFactory();
+    private static final OperarioFactory operarioFactory = OperarioFactory.getInstanceOfOperarioFactory();
     private static final ArrayList<Runnable> operarios = new ArrayList<>(Constantes.CANTIDAD_OPERARIOS);
-    private static final HilosFactory hilosFactory = new HilosFactory();
-    public static final Monitor monitor = new Monitor();
-    public static final Rdp rdp = new Rdp();
-    public static final CustomLogger logger = new CustomLogger();
+    private static final HilosFactory hilosFactory = HilosFactory.getInstanceOfThreadFactory();
+    public static final Monitor monitor = Monitor.getInstanceOfMonitor();
+    public static final Rdp rdp = Rdp.getInstanceOfRdp();
+    public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
     public static final Exchanger<Integer> exchanger = new Exchanger<>();
 
     public static void main(String[] args) {

@@ -12,43 +12,54 @@ import static com.bugui_soft.utils.Utilidades.*;
 
 public class Rdp {
 
-    private final Integer[][] mtxIncidencia; //matriz de incidencia
-    private final Integer[] marcadoInicial; //marcado inicial
+    private static final Object lock = new Object();
+    private static Rdp rdp;
+    private static Integer[][] mtxIncidencia; //matriz de incidencia
+    private static Integer[] marcadoInicial; //marcado inicial
     private static Integer[] marcadoActual;
     private static Long[] timeStamp;//X0, tiempo de sensibilizado inicial
-    private final VectorTSensibilizadas tSensibilizadasActual;
+    private static VectorTSensibilizadas tSensibilizadasActual;
 
-    public Rdp() {
+    private Rdp() { }
 
-        mtxIncidencia = new Integer[][]{
-                {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-                {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-                {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
-                {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
-                {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
-                {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
-                {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
-                {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
-                {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
+    public static Rdp getInstanceOfRdp() {
+        synchronized (lock) {
+            if (rdp == null) {
+                rdp = new Rdp();
+                mtxIncidencia = new Integer[][]{
+                        {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+                        {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                        {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
+                        {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
+                        {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
+                        {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
+                        {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
+                        {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
+                        {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
 
-        marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
-        marcadoActual = marcadoInicial.clone();
+                marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
+                marcadoActual = marcadoInicial.clone();
 
-        //array de estado de sensibilización de transiciones
-        Integer[] tSensibilizadasInicial = genTSensibilizadas();
-        tSensibilizadasActual = new VectorTSensibilizadas(tSensibilizadasInicial);
-        timeStamp = new Long[CANTIDAD_TRANSICIONES];
-        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            timeStamp[i] = System.currentTimeMillis();
+                //array de estado de sensibilización de transiciones
+                Integer[] tSensibilizadasInicial = genTSensibilizadas();
+                tSensibilizadasActual = VectorTSensibilizadas.getInstanceOfVectorTSensibilizadas(tSensibilizadasInicial);
+                timeStamp = new Long[CANTIDAD_TRANSICIONES];
+                for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
+                    timeStamp[i] = System.currentTimeMillis();
+                }
+            } else {
+                System.out.println("Ya existe una instancia de Rdp, no se creará otra");
+            }
+            return rdp;
         }
     }
 
@@ -56,6 +67,7 @@ public class Rdp {
      * Dispara la red de petri, cambiando su marcado y transiciones sensibilizadas
      * , devuelve un Boolean dependiendo de si se pudo disparar o no.
      */
+
     public Boolean disparar(Integer disparo) {
         if (tSensibilizadasActual.estaSensibilizado(disparo)) {
             actualizarMarcado(disparo);
@@ -96,7 +108,7 @@ public class Rdp {
 
     }
 
-    private Integer[] genTSensibilizadas() {
+    private static Integer[] genTSensibilizadas() {
         //creo un arreglo inicializado en 1 por defecto
         Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 

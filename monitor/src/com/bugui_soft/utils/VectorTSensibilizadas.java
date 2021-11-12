@@ -7,21 +7,33 @@ import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 public class VectorTSensibilizadas {
-    private final Integer[] alfa;
-    private final Integer[] beta;
+    private static final Object lock = new Object();
+    private static VectorTSensibilizadas vectorTSensibilizadas;
+    private static Integer[] alfa;
+    private static Integer[] beta;
     private Integer[] sensibilizada;
 
-    public VectorTSensibilizadas(Integer[] transiciones) {
-        alfa = new Integer[CANTIDAD_TRANSICIONES];
-        beta = new Integer[CANTIDAD_TRANSICIONES];
+    private VectorTSensibilizadas() {}
 
-        Random rd = new Random();
-        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            alfa[i] = rd.nextInt(2000);
-            beta[i] = alfa[i] + rd.nextInt(5000);
+    public static VectorTSensibilizadas getInstanceOfVectorTSensibilizadas(Integer[] transiciones) {
+        synchronized (lock) {
+            if (vectorTSensibilizadas == null) {
+                vectorTSensibilizadas = new VectorTSensibilizadas();
+                alfa = new Integer[CANTIDAD_TRANSICIONES];
+                beta = new Integer[CANTIDAD_TRANSICIONES];
+
+                Random rd = new Random();
+                for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
+                    alfa[i] = rd.nextInt(2000);
+                    beta[i] = alfa[i] + rd.nextInt(5000);
+                }
+
+                vectorTSensibilizadas.sensibilizada = transiciones;
+            } else {
+                System.out.println("Ya existe una instancia de vector t sensibilizadas, no se creará otra");
+            }
+            return vectorTSensibilizadas;
         }
-
-        this.sensibilizada = transiciones;
     }
 
     public void setSensibilizado(Integer[] nuevaTS) {

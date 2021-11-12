@@ -10,14 +10,26 @@ import static com.bugui_soft.Main.rdp;
 
 
 public class CustomLogger implements Runnable {
+    private static final Object lock = new Object();
+    private static CustomLogger customLogger;
     private static Integer contador = CONTADOR_DEL_RPOGRAMA;
-    private FileWriter file;
+    private static FileWriter file;
 
-    public CustomLogger() {
-        try {
-            file = new FileWriter("Data/Log.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private CustomLogger() { }
+
+    public static CustomLogger getInstanceOfCustomLogger() {
+        synchronized (lock) {
+            if (customLogger == null) {
+                try {
+                    customLogger = new CustomLogger();
+                    file = new FileWriter("data/Log.txt");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Ya existe una instancia de CustomLogger, no se creará otra");
+            }
+            return customLogger;
         }
     }
 

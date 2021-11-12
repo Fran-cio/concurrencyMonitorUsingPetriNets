@@ -5,6 +5,8 @@ import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
 
 public class Utilidades {
 
+    private Utilidades() {}
+
     //Calcula el producto punto pero solo para los valores de plazas y transiciones definidos
     public static Integer[] productoMatricial(Integer[][] matriz, Integer[] vector) {
         Integer[] productoMatricial = new Integer[CANTIDAD_PLAZAS];

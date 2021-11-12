@@ -1,6 +1,8 @@
 package com.bugui_soft.utils;
 
 public final class Constantes {
+    private Constantes() {}
+
     public static final String TECNICO = "com.bugui_soft.Operario.Tecnico"; //HILOS VERDES
     public static final String PRODUCTOR = "com.bugui_soft.Operario.Productor"; //HILOS AMARILLOS
     public static final String DESCARTADOR = "Descartador"; //HILOS ROJOS
