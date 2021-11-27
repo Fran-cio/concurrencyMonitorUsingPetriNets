@@ -27,5 +27,3 @@ while condicion:
 
 if resultado.count != 0:
     print("\nSobrante:\n", resultado)
-else:
-    print("It's home")

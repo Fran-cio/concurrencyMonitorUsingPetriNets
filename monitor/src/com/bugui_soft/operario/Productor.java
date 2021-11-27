@@ -25,7 +25,6 @@ public class Productor implements Runnable {
             }
             // Simular realizar tarea
         }
-
     }
 
 }

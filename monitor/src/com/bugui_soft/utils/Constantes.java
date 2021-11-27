@@ -19,5 +19,4 @@ public final class Constantes {
     public static final Integer SLEEP_TECNICO_MS = 5;
     public static final Integer SLEEP_CALIDAD_MS = 5;
     public static final Integer SLEEP_DESCARTADOR_MS = 5;
-
 }

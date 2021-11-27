@@ -35,27 +35,21 @@ public class CustomLogger implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Rdp.isHome) {
             try {
                 Integer numDisp = exchanger.exchange(null);
-                //condicion de llegada para el log
-                //cuando se cumple un ciclo es true, de esta manera no quedan transiciones sueltas que nos rompa la expresión regular
-                boolean isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
-                if (contador <= 0 && isHome) {
-                    file.write("T" + numDisp + " ");
-                    file.flush();
-                    file.close();
-                    Main.finalizarPrograma();
-                } else {
-                    file.write("T" + numDisp + " ");
-                    file.flush();
-                    System.out.println("T" + numDisp);
-                    contador--;
-                }
-
+                System.out.println("T" + numDisp);
+                file.write("T" + numDisp + " ");
+                file.flush();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
         }
     }
 }

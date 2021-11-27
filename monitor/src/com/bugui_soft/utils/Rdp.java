@@ -1,11 +1,13 @@
 package com.bugui_soft.utils;
 
 
+import com.bugui_soft.Main;
+
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static com.bugui_soft.Main.exchanger;
-import static com.bugui_soft.Main.monitor;
+import static com.bugui_soft.Main.*;
+import static com.bugui_soft.Main.rdp;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 import static com.bugui_soft.utils.Utilidades.*;
@@ -19,6 +21,8 @@ public class Rdp {
     private static Integer[] marcadoActual;
     private static Long[] timeStamp;//X0, tiempo de sensibilizado inicial
     private static VectorTSensibilizadas tSensibilizadasActual;
+
+    public static boolean isHome;
 
     private Rdp() { }
 
@@ -70,15 +74,18 @@ public class Rdp {
 
     public Boolean disparar(Integer disparo) {
         if (tSensibilizadasActual.estaSensibilizado(disparo)) {
-            actualizarMarcado(disparo);
-            actualizarTSensibilizadas();
-            monitor.getPolitica().incrementarTI(disparo);
             try {
                 exchanger.exchange(disparo);
-                return true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                return false;
             }
+            actualizarMarcado(disparo);
+            isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
+            //if(isHome) Main.finalizarPrograma();
+            actualizarTSensibilizadas();
+            monitor.getPolitica().incrementarTI(disparo);
+            return true;
         }
         return false;
     }

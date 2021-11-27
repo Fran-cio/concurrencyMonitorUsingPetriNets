@@ -18,8 +18,15 @@ public class Main {
     public static void main(String[] args) {
         cargarOperarios();
         //crear y correr hilos
-        hilosFactory.newThread(logger).start();
+        Thread log = hilosFactory.newThread(logger);
+        log.start();
         for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
+        try {
+            log.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finalizarPrograma();
     }
 
     private static void cargarOperarios() {
