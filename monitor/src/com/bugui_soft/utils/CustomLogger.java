@@ -22,7 +22,7 @@ public class CustomLogger implements Runnable {
             if (customLogger == null) {
                 try {
                     customLogger = new CustomLogger();
-                    file = new FileWriter("data/Log.txt");
+                    file = new FileWriter("data/Log.txt", true);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -44,10 +44,12 @@ public class CustomLogger implements Runnable {
                 boolean isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
                 if (contador <= 0 && isHome) {
                     file.write("T" + numDisp + " ");
+                    file.flush();
                     file.close();
                     Main.finalizarPrograma();
                 } else {
                     file.write("T" + numDisp + " ");
+                    file.flush();
                     System.out.println("T" + numDisp);
                     contador--;
                 }

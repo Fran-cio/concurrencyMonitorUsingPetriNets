@@ -24,8 +24,8 @@ public class VectorTSensibilizadas {
 
                 Random rd = new Random();
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-                    alfa[i] = rd.nextInt(2000);
-                    beta[i] = alfa[i] + rd.nextInt(5000);
+                    alfa[i] = rd.nextInt(200);
+                    beta[i] = alfa[i] + rd.nextInt(5000) + 5000;
                 }
 
                 vectorTSensibilizadas.sensibilizada = transiciones;
@@ -80,19 +80,19 @@ public class VectorTSensibilizadas {
 //TODO:las lineas 71 y 78/83 estan comentadas para evitar deadlock, hay que revisar como lo solucionamos
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException {
         if (antesDeAlfa) {
-            //getMutex().release();
+            getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            /*try {
+            try {
                 getMutex().acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            */
+
         } else {
             throw new TimeoutException();
         }
