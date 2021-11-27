@@ -18,6 +18,15 @@
 *.zip
 *.tar.gz
 *.rar
+*.xml
+
+# Output files
+*.out
+*.class
+
+*out/production/monitor/com/bugui_soft
+# Drive Files
+*.ini
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

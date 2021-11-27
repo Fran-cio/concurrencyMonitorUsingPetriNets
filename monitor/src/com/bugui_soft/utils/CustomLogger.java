@@ -22,7 +22,7 @@ public class CustomLogger implements Runnable {
             if (customLogger == null) {
                 try {
                     customLogger = new CustomLogger();
-                    file = new FileWriter("data/Log.txt", true);
+                    file = new FileWriter("data/Log.txt", false);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -36,7 +36,6 @@ public class CustomLogger implements Runnable {
     @Override
     public void run() {
         while (true) {
-            System.out.println("Loggea: " + Thread.currentThread().getName());
             try {
                 Integer numDisp = exchanger.exchange(null);
                 //condicion de llegada para el log

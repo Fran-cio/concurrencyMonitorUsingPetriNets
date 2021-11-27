@@ -15,4 +15,9 @@ public final class Constantes {
     public static final Integer CANTIDAD_PLAZAS = 18;
     public static final Integer CANTIDAD_TRANSICIONES = 11;
     public static final Integer CONTADOR_DEL_RPOGRAMA = 10;
+    public static final Integer SLEEP_PRODUCTOR_MS = 5;
+    public static final Integer SLEEP_TECNICO_MS = 5;
+    public static final Integer SLEEP_CALIDAD_MS = 5;
+    public static final Integer SLEEP_DESCARTADOR_MS = 5;
+
 }
