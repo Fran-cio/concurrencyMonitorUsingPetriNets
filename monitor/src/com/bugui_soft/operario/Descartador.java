@@ -15,6 +15,7 @@ public class Descartador implements Runnable {
     }
 
     public void run() {
+        Thread.currentThread().setName("Descartador");
         while (true) {
             monitor.dispararTransicion(tInvariante);
             try {

@@ -24,7 +24,8 @@ public class Rdp {
 
     public static boolean isHome;
 
-    private Rdp() { }
+    private Rdp() {
+    }
 
     public static Rdp getInstanceOfRdp() {
         synchronized (lock) {
@@ -82,7 +83,6 @@ public class Rdp {
             }
             actualizarMarcado(disparo);
             isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
-            //if(isHome) Main.finalizarPrograma();
             actualizarTSensibilizadas();
             monitor.getPolitica().incrementarTI(disparo);
             return true;
@@ -103,12 +103,7 @@ public class Rdp {
     }
 
     public void actualizarTSensibilizadas() {
-        Integer[] nuevoTS= genTSensibilizadas();
-
-        /**TODO: borrar comentario
-         *estabamos calculando el timestamp con los 2 arreglos iguales, asi que les cambie el orden. ahora esto anda bien.
-        **/
-
+        Integer[] nuevoTS = genTSensibilizadas();
         //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
         setTimeStamp(nuevoTS);
         setSensibilizadas(nuevoTS);

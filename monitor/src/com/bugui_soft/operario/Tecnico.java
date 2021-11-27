@@ -15,6 +15,7 @@ public class Tecnico implements Runnable {
     }
 
     public void run() {
+        Thread.currentThread().setName("Tecnico");
         while (true) {
             monitor.dispararTransicion(tInvariante);
             try {

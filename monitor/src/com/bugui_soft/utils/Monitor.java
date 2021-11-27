@@ -35,7 +35,7 @@ public class Monitor {
             mutex.acquire();//entrada al monitor
             Integer[] transPot = getTransPotencialDelOperario(tInvariantes);
 
-            //Si este Operario  tiene transiciones potenciales (Sensibilizadas por el marcado
+            //Si este Operario tiene transiciones potenciales (Sensibilizadas por el marcado
             if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
 
                 Integer tDisparable = politica.cualDisparar(transPot);

@@ -16,6 +16,7 @@ public class Productor implements Runnable {
     }
 
     public void run() {
+        Thread.currentThread().setName("Productor");
         while (true) {
             monitor.dispararTransicion(tInvariante);
             try {

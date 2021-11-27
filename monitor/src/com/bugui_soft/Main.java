@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.concurrent.Exchanger;
 import com.bugui_soft.utils.*;
 import static com.bugui_soft.utils.Constantes.*;
-
+/*
+TODO:
+    -Interrumpir cada hilo por separado asi no matamos todo de una
+    -Comentar bien todo lo que falta
+    -Comprender correctamente los elementos del codigo
+ */
 public class Main {
     //crear el monitor
     private static final OperarioFactory operarioFactory = OperarioFactory.getInstanceOfOperarioFactory();

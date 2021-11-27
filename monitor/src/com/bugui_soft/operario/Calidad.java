@@ -16,6 +16,7 @@ public class Calidad implements Runnable {
     }
 
     public void run() {
+        Thread.currentThread().setName("Calidad");
         while (true) {
             monitor.dispararTransicion(tInvariante);
             try {
