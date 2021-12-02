@@ -13,8 +13,8 @@ public class VectorTSensibilizadas {
     private static VectorTSensibilizadas vectorTSensibilizadas;
     private static Integer[] alfa;
     private static Integer[] beta;
-    private Integer[] sensibilizada;
-    private static Integer estaEsperando;
+    private static Integer[] sensibilizada;
+    private static Integer[] estaEsperando;
 
     private VectorTSensibilizadas() {}
 
@@ -24,15 +24,16 @@ public class VectorTSensibilizadas {
                 vectorTSensibilizadas = new VectorTSensibilizadas();
                 alfa = new Integer[CANTIDAD_TRANSICIONES];
                 beta = new Integer[CANTIDAD_TRANSICIONES];
-                estaEsperando=0;
+                estaEsperando= new Integer[CANTIDAD_TRANSICIONES];
 
                 Random rd = new Random();
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
                     alfa[i] = rd.nextInt(200);
                     beta[i] = alfa[i] + rd.nextInt(2500);
+                    estaEsperando[i]=0;
                 }
 
-                vectorTSensibilizadas.sensibilizada = transiciones;
+                sensibilizada = transiciones;
             } else {
                 System.out.println("Ya existe una instancia de vector t sensibilizadas, no se creará otra");
             }
@@ -50,12 +51,15 @@ public class VectorTSensibilizadas {
 
     public boolean estaSensibilizado(Integer disparo) {
         /*
-            TODO: Comentario informativo de avance
-            Fran:Intente hacer un arreglo de esta esperando y que varios intenten entrar en la ventana, por alguna razon esto
-            da problemas de concurrencia. Asi que implemente un flag que si ya hay alguien esperando, que no entre
-            es una cuestion de diseño, prefiero hacerlo de forma de antes pero asi lo hizo Mico en la clase
+            TODO: Comentario informativo
+            Fran: No parecen ejecutarse transiciones invalidas, tampoco parece violarse la seccion critica. Si colocan un
+            breakpoint en la linea 73, va ver como siempre que una trans le gana a otra, se da en la transicion, 3. Esto,
+            lleva a darme a entender que esta andando bien, pero como el invariante 1 es el mas sensible a quedar
+            desensibilizado, en la gran mayoria de los casos se da que los otros invariantes le ganan la ventana de trans
+            lo cual lleva a que esa rama tienda a no poder avanzar. De ser este el problema, preferiria optar por quedarme
+            con la otra solucion.
          */
-        if (sensibilizada[disparo] > 0 && estaEsperando==0) { //sensibilizado por tokens
+        if (sensibilizada[disparo] > 0 && estaEsperando[disparo]==0) { //sensibilizado por tokens
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();
             long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
@@ -65,8 +69,13 @@ public class VectorTSensibilizadas {
 
             if (estamosEnVentana) return true;
             try {
-                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual);
-                return true;
+                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual,disparo);
+                if(sensibilizada[disparo]==1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             } catch (TimeoutException e) {
                 System.out.println("La transición T" + disparo + " se pasó la ventana de tiempo");
                 sensibilizada[disparo] = 0;
@@ -80,9 +89,12 @@ public class VectorTSensibilizadas {
 /**Espera el tiempo necesario para disparar en caso de superar la ventana.
  * @exception TimeoutException porque superó el tiempo máximo de la ventana.
  * */
-    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException, InterruptedException {
+    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual,Integer disparo) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
-            estaEsperando=1;
+            estaEsperando[disparo]=1;
+            if(Monitor.getMutex().availablePermits()!=0)
+                System.exit(1);//Se puede sacar: Si el semaforo deja de ser binario muere aca
+
             Monitor.getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
@@ -91,7 +103,7 @@ public class VectorTSensibilizadas {
                 e.printStackTrace();
             }
             Monitor.getMutex().acquire();
-            estaEsperando=0;
+            estaEsperando[disparo]=0;
         } else {
             throw new TimeoutException();
         }

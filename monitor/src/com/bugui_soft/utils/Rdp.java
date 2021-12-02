@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.bugui_soft.Main.*;
-import static com.bugui_soft.Main.rdp;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 import static com.bugui_soft.utils.Utilidades.*;
@@ -107,7 +106,6 @@ public class Rdp {
         //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
         setTimeStamp(nuevoTS);
         setSensibilizadas(nuevoTS);
-
     }
 
     private static Integer[] genTSensibilizadas() {

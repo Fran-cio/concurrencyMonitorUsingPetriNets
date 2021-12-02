@@ -16,7 +16,6 @@ public class Main {
     private static final ArrayList<Runnable> operarios = new ArrayList<>(Constantes.CANTIDAD_OPERARIOS);
     private static final HilosFactory hilosFactory = HilosFactory.getInstanceOfThreadFactory();
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
-    public static final Rdp rdp = Rdp.getInstanceOfRdp();
     public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
     public static final Exchanger<Integer> exchanger = new Exchanger<>();
 

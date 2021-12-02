@@ -2,10 +2,10 @@ package com.bugui_soft.utils;
 
 import java.util.Arrays;
 import java.util.concurrent.*;
-import static com.bugui_soft.Main.rdp;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 
 public class Monitor {
+    private static final Rdp rdp = Rdp.getInstanceOfRdp();
     private final static Object lock = new Object();
     private static Monitor monitor;
     private static Politicas politica;
@@ -69,6 +69,9 @@ public class Monitor {
 
             colasCondition[cualDisparar].release();
         } else {
+            if(mutex.availablePermits()!=0){
+                System.exit(1); //Se puede sacar: Si el semaforo deja de ser binario muere aca
+            }
             mutex.release();
         }
     }

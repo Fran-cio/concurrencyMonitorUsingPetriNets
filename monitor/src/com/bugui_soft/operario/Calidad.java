@@ -6,7 +6,6 @@ import com.bugui_soft.utils.Rdp;
 import java.util.concurrent.TimeUnit;
 
 import static com.bugui_soft.Main.monitor;
-import static com.bugui_soft.Main.rdp;
 
 public class Calidad implements Runnable {
 

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import com.bugui_soft.Main;
 import static com.bugui_soft.utils.Constantes.CONTADOR_DEL_RPOGRAMA;
 import static com.bugui_soft.Main.exchanger;
-import static com.bugui_soft.Main.rdp;
 
 
 public class CustomLogger implements Runnable {
