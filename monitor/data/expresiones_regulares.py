@@ -1,6 +1,6 @@
 import re
 
-f = open("data/Log.txt", "r")
+f = open("Log.txt", "r")
 mensaje = f.read()
 print("\n",mensaje)
 f.close()

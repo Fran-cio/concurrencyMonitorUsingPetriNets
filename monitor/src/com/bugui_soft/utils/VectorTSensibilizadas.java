@@ -1,5 +1,7 @@
 package com.bugui_soft.utils;
 
+import javax.swing.*;
+
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 import static com.bugui_soft.utils.Monitor.*;
 
@@ -12,6 +14,7 @@ public class VectorTSensibilizadas {
     private static Integer[] alfa;
     private static Integer[] beta;
     private Integer[] sensibilizada;
+    private static Integer estaEsperando;
 
     private VectorTSensibilizadas() {}
 
@@ -21,6 +24,7 @@ public class VectorTSensibilizadas {
                 vectorTSensibilizadas = new VectorTSensibilizadas();
                 alfa = new Integer[CANTIDAD_TRANSICIONES];
                 beta = new Integer[CANTIDAD_TRANSICIONES];
+                estaEsperando=0;
 
                 Random rd = new Random();
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
@@ -45,7 +49,13 @@ public class VectorTSensibilizadas {
     }
 
     public boolean estaSensibilizado(Integer disparo) {
-        if (sensibilizada[disparo] > 0) { //sensibilizado por tokens
+        /*
+            TODO: Comentario informativo de avance
+            Fran:Intente hacer un arreglo de esta esperando y que varios intenten entrar en la ventana, por alguna razon esto
+            da problemas de concurrencia. Asi que implemente un flag que si ya hay alguien esperando, que no entre
+            es una cuestion de diseño, prefiero hacerlo de forma de antes pero asi lo hizo Mico en la clase
+         */
+        if (sensibilizada[disparo] > 0 && estaEsperando==0) { //sensibilizado por tokens
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();
             long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
@@ -60,6 +70,8 @@ public class VectorTSensibilizadas {
             } catch (TimeoutException e) {
                 System.out.println("La transición T" + disparo + " se pasó la ventana de tiempo");
                 sensibilizada[disparo] = 0;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         return false;
@@ -68,14 +80,18 @@ public class VectorTSensibilizadas {
 /**Espera el tiempo necesario para disparar en caso de superar la ventana.
  * @exception TimeoutException porque superó el tiempo máximo de la ventana.
  * */
-    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException {
+    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
+            estaEsperando=1;
+            Monitor.getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            Monitor.getMutex().acquire();
+            estaEsperando=0;
         } else {
             throw new TimeoutException();
         }

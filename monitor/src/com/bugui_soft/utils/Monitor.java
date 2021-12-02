@@ -34,10 +34,11 @@ public class Monitor {
         try {
             mutex.acquire();//entrada al monitor
             Integer[] transPot = getTransPotencialDelOperario(tInvariantes);
-
             //Si este Operario tiene transiciones potenciales (Sensibilizadas por el marcado
             if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
-
+                /*
+                    Me gustaria dejar mejor esta parte
+                */
                 Integer tDisparable = politica.cualDisparar(transPot);
                 Boolean seDisparo = rdp.disparar(tDisparable);
 
