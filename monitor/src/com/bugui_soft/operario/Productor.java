@@ -1,6 +1,7 @@
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;
+import com.bugui_soft.utils.Rdp;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +18,7 @@ public class Productor implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Productor");
-        while (true) {
+        while (!Rdp.isHome) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_PRODUCTOR_MS);

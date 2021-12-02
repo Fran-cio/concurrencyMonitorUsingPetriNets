@@ -47,6 +47,6 @@ public class Main {
 
     public static void finalizarPrograma() {
         System.out.println("Se acabó el programa");
-        System.exit(0); //TODO: cambiar a un Interrupt, y finalizar hilo por hilo
+        System.exit(0);
     }
 }

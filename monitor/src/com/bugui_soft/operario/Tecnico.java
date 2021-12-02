@@ -1,6 +1,7 @@
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;
+import com.bugui_soft.utils.Rdp;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ public class Tecnico implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Tecnico");
-        while (true) {
+        while (!Rdp.isHome) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_TECNICO_MS);

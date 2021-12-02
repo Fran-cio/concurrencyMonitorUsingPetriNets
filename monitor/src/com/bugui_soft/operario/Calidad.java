@@ -1,10 +1,12 @@
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;
+import com.bugui_soft.utils.Rdp;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.bugui_soft.Main.monitor;
+import static com.bugui_soft.Main.rdp;
 
 public class Calidad implements Runnable {
 
@@ -17,7 +19,7 @@ public class Calidad implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Calidad");
-        while (true) {
+        while (!Rdp.isHome) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_CALIDAD_MS);
