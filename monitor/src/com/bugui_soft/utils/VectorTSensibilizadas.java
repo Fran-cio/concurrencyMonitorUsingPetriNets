@@ -32,6 +32,10 @@ public class VectorTSensibilizadas {
                     beta[i] = alfa[i] + rd.nextInt(2500);
                     estaEsperando[i]=0;
                 }
+                alfa[3]=0; //Ahora el programa se porta mejor, comprobando mi hipotesis
+                /*
+                Propongo generar algunas tras de alpha 0 para asi tenemos algunas trans temporales y otras que no
+                 */
 
                 sensibilizada = transiciones;
             } else {
@@ -92,8 +96,10 @@ public class VectorTSensibilizadas {
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual,Integer disparo) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
             estaEsperando[disparo]=1;
-            if(Monitor.getMutex().availablePermits()!=0)
-                System.exit(1);//Se puede sacar: Si el semaforo deja de ser binario muere aca
+            if(Monitor.getMutex().availablePermits()!=0) {
+               System.out.println("El mutex ha dejado de ser binario");
+               System.exit(1);//Se puede sacar: Si el semaforo deja de ser binario muere aca
+            }
 
             Monitor.getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;

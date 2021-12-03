@@ -70,6 +70,7 @@ public class Monitor {
             colasCondition[cualDisparar].release();
         } else {
             if(mutex.availablePermits()!=0){
+                System.out.println("El mutex ha dejado de ser binario");
                 System.exit(1); //Se puede sacar: Si el semaforo deja de ser binario muere aca
             }
             mutex.release();

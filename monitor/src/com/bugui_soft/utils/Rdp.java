@@ -106,6 +106,17 @@ public class Rdp {
         //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
         setTimeStamp(nuevoTS);
         setSensibilizadas(nuevoTS);
+
+        /*
+        Sabiendo el ultimo marcado y completando la red con las trans que sobran en las ejecuciones podemos corroborar
+        si se ha violado o no el invariante de transicion, comparando el marcado obtenido en el programa y el alcanzado
+        en el PIPE. (El formato prensentado en la impresion es la misma que se va a ver en el PIPE)
+         */
+        printMarcadoActual();
+        if(!cumpleInvariantesP()) { //Un chequeo mas para verificar la sanidad de la concurrencia
+            System.out.println("Se ha violado los invariantes de plaza");
+            System.exit(1);
+        }
     }
 
     private static Integer[] genTSensibilizadas() {
@@ -124,6 +135,22 @@ public class Rdp {
         }
 
         return nuevaTS;
+    }
+
+    private static boolean cumpleInvariantesP(){
+        boolean Ip1,Ip2,Ip3,Ip4,Ip5,Ip6,Ip7,Ip8,Ip9,Ip10;
+        Ip1= (marcadoActual[16]+marcadoActual[10]+marcadoActual[5]==2);
+        Ip2= (marcadoActual[17]+marcadoActual[14]+marcadoActual[5]==3);
+        Ip3= (marcadoActual[15]+marcadoActual[14]+marcadoActual[8]==2);
+        Ip4= (marcadoActual[0]+marcadoActual[1]+marcadoActual[12]+marcadoActual[4]+marcadoActual[5]+marcadoActual[8]==3);
+        Ip5=(marcadoActual[10]+marcadoActual[11]+marcadoActual[14]+marcadoActual[7]==3);
+        Ip6=(marcadoActual[12]+marcadoActual[13]+marcadoActual[14]==2);
+        Ip7=(marcadoActual[1]+marcadoActual[2]==1);
+        Ip8=(marcadoActual[3]+marcadoActual[4]==1);
+        Ip9=(marcadoActual[5]+marcadoActual[6]+marcadoActual[7]==2);
+        Ip10=(marcadoActual[10]+marcadoActual[8]+marcadoActual[9]==1);
+
+        return (Ip1 && Ip2 && Ip3 && Ip4 && Ip5 && Ip6 && Ip7 && Ip8 && Ip9 && Ip10);
     }
 
     private void setSensibilizadas(Integer[] nuevaTS) {
@@ -155,6 +182,22 @@ public class Rdp {
 
     public static Long[] getTimeStamp() {
         return timeStamp;
+    }
+    public static void printMarcadoActual(){
+        System.out.print("[");
+        System.out.print(marcadoActual[16] + ",");
+        System.out.print(marcadoActual[17] + ",");
+        System.out.print(marcadoActual[15] + ",");
+        for (int i=0;i<2;i++) {
+            System.out.print(marcadoActual[i] + ",");
+        }
+        for (int i=10;i<15;i++) {
+            System.out.print(marcadoActual[i] + ",");
+        }
+        for (int i=2;i<10;i++) {
+            System.out.print(marcadoActual[i] + ",");
+        }
+        System.out.print("]\n");
     }
 }
 
