@@ -114,4 +114,8 @@ public class Monitor {
     public static Semaphore getMutex() {
         return mutex;
     }
+
+    public void printMarcado() {
+        rdp.printMarcadoActual();
+    }
 }

@@ -45,6 +45,7 @@ public class Main {
     }
 
     public static void finalizarPrograma() {
+        monitor.printMarcado();
         System.out.println("Se acabó el programa");
         System.exit(0);
     }

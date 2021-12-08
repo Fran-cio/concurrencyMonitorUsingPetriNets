@@ -2,10 +2,7 @@ package com.bugui_soft.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import com.bugui_soft.Main;
 
-import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
 import static com.bugui_soft.utils.Constantes.CONTADOR_DEL_RPOGRAMA;
 import static com.bugui_soft.Main.exchanger;
 
@@ -36,10 +33,10 @@ public class CustomLogger implements Runnable {
 
     @Override
     public void run() {
-        while (!Rdp.isHome) {
+        while (!Rdp.milInvariantes) {
             try {
                 Integer numDisp = exchanger.exchange(null);
-                //System.out.println("T" + numDisp);
+                System.out.println("T" + numDisp);
                 file.write("T" + numDisp + " ");
                 file.flush();
             } catch (IOException | InterruptedException e) {

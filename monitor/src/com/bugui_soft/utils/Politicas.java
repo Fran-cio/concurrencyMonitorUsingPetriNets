@@ -3,6 +3,7 @@ package com.bugui_soft.utils;
 import java.util.HashMap;
 
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
+import static com.bugui_soft.utils.Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
 
 public class Politicas {
     private static final Object lock = new Object();
@@ -70,12 +71,20 @@ public class Politicas {
     }
 
     public void incrementarTI(Integer t) {
-        if (t == 0) {//es el conflicto
-            cuentaTI[0]++;
+        if (t == 5) {//es el conflicto
             cuentaTI[1]++;
-        } else {
-            int cont = mapeoTaTI.get(t);
-            cuentaTI[cont]++;
+        } else if(t ==10) {
+            cuentaTI[0]++;
         }
+        else if(t==9) {
+            //int cont = mapeoTaTI.get(t);
+            cuentaTI[2]++;
+        }
+    }
+
+    public boolean milInveriantes(){
+        if(cuentaTI[0]+cuentaTI[1]+cuentaTI[2]>NUMERO_DE_TRANS_A_EJECUTAR)
+            return true;
+        return false;
     }
 }

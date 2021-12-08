@@ -19,4 +19,9 @@ public final class Constantes {
     public static final Integer SLEEP_TECNICO_MS = 5;
     public static final Integer SLEEP_CALIDAD_MS = 5;
     public static final Integer SLEEP_DESCARTADOR_MS = 5;
+    public static final Integer[] TRANSCIONES_TEMPORALES={1,2,3,4,5,7,8,9,10};
+    public static final Integer[] INV_1={1,10};
+    public static final Integer[] INV_2={2,3,4,5};
+    public static final Integer[] INV_3={7,8,9};
+    public static final Integer NUMERO_DE_TRANS_A_EJECUTAR=1000;
 }

@@ -2,7 +2,7 @@ package com.bugui_soft.utils;
 
 import javax.swing.*;
 
-import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
+import static com.bugui_soft.utils.Constantes.*;
 import static com.bugui_soft.utils.Monitor.*;
 
 import java.util.Random;
@@ -26,13 +26,27 @@ public class VectorTSensibilizadas {
                 beta = new Integer[CANTIDAD_TRANSICIONES];
                 estaEsperando= new Integer[CANTIDAD_TRANSICIONES];
 
-                Random rd = new Random();
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-                    alfa[i] = rd.nextInt(200);
-                    beta[i] = alfa[i] + rd.nextInt(2500);
+                    alfa[i] = 0;
+                    beta[i] = Integer.MAX_VALUE;
                     estaEsperando[i]=0;
                 }
-                alfa[3]=0; //Ahora el programa se porta mejor, comprobando mi hipotesis
+                Random rd = new Random();
+                for (int i = 0; i < INV_1.length; i++) {
+                    alfa[INV_1[i]] = 5 + rd.nextInt(5);
+                    beta[INV_1[i]] = alfa[INV_1[i]]+ 50 + rd.nextInt(100);
+                    estaEsperando[i]=0;
+                }
+                for (int i = 0; i < INV_2.length; i++) {
+                    alfa[INV_2[i]] = rd.nextInt(5);
+                    beta[INV_2[i]] = alfa[INV_2[i]]+ 50 + rd.nextInt(100);
+                    estaEsperando[i]=0;
+                }
+                for (int i = 0; i < INV_3.length; i++) {
+                    alfa[INV_3[i]] = 10 + rd.nextInt(10);
+                    beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
+                    estaEsperando[i]=0;
+                }
                 /*
                 Propongo generar algunas tras de alpha 0 para asi tenemos algunas trans temporales y otras que no
                  */
@@ -74,6 +88,9 @@ public class VectorTSensibilizadas {
             if (estamosEnVentana) return true;
             try {
                 estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual,disparo);
+                if (disparo==3){
+                    disparo&=disparo;
+                }
                 if(sensibilizada[disparo]==1) {
                     return true;
                 }

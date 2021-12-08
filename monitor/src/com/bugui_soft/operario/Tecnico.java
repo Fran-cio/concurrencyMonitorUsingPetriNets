@@ -17,7 +17,7 @@ public class Tecnico implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Tecnico");
-        while (!Rdp.isHome) {
+        while (!Rdp.milInvariantes) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_TECNICO_MS);

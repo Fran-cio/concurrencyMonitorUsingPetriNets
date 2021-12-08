@@ -18,7 +18,7 @@ public class Productor implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Productor");
-        while (!Rdp.isHome) {
+        while (!Rdp.milInvariantes) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_PRODUCTOR_MS);

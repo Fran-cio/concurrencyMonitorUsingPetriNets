@@ -1,10 +1,7 @@
 package com.bugui_soft.utils;
 
 
-import com.bugui_soft.Main;
-
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static com.bugui_soft.Main.*;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
@@ -21,7 +18,7 @@ public class Rdp {
     private static Long[] timeStamp;//X0, tiempo de sensibilizado inicial
     private static VectorTSensibilizadas tSensibilizadasActual;
 
-    public static boolean isHome;
+    public static boolean milInvariantes;
 
     private Rdp() {
     }
@@ -81,7 +78,8 @@ public class Rdp {
                 return false;
             }
             actualizarMarcado(disparo);
-            isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
+            //isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
+            milInvariantes = monitor.getPolitica().milInveriantes();
             actualizarTSensibilizadas();
             monitor.getPolitica().incrementarTI(disparo);
             return true;
@@ -112,7 +110,7 @@ public class Rdp {
         si se ha violado o no el invariante de transicion, comparando el marcado obtenido en el programa y el alcanzado
         en el PIPE. (El formato prensentado en la impresion es la misma que se va a ver en el PIPE)
          */
-        printMarcadoActual();
+        //printMarcadoActual();
         if(!cumpleInvariantesP()) { //Un chequeo mas para verificar la sanidad de la concurrencia
             System.out.println("Se ha violado los invariantes de plaza");
             System.exit(1);
@@ -183,7 +181,8 @@ public class Rdp {
     public static Long[] getTimeStamp() {
         return timeStamp;
     }
-    public static void printMarcadoActual(){
+
+    public void printMarcadoActual(){
         System.out.print("[");
         System.out.print(marcadoActual[16] + ",");
         System.out.print(marcadoActual[17] + ",");

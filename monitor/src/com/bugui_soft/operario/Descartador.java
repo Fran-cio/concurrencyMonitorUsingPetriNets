@@ -17,7 +17,7 @@ public class Descartador implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Descartador");
-        while (!Rdp.isHome) {
+        while (!Rdp.milInvariantes) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_DESCARTADOR_MS);

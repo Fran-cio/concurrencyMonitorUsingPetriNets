@@ -18,8 +18,7 @@ patron = r"((T0 )(.*?)((T1 )(.*?)(T10 )|(T2 )(.*?)(T3 )(.*?)(T4 )(.*?)(T5 ))|(T6
 resultado = EXPRESION
 condicion = True
 print("\n",contador)
-print("\ninvariante 1:", contador["T0"]+contador["T1"]+contador["T10"], "\ninvariante 2:", contador["T0"]+contador["T2"] +
-      contador["T3"]+contador["T4"]+contador["T5"], "\ninvariante 3:", contador["T6"]+contador["T7"]+contador["T8"]+contador["T9"])
+print("\ninvariante 1:", contador["T10"], "\ninvariante 2:", contador["T5"], "\ninvariante 3:", contador["T9"])
 
 while condicion:
     condicion = re.search(patron, resultado)

@@ -18,7 +18,7 @@ public class Calidad implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Calidad");
-        while (!Rdp.isHome) {
+        while (!Rdp.milInvariantes) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_CALIDAD_MS);
