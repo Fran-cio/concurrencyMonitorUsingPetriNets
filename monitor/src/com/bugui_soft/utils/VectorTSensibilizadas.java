@@ -33,17 +33,17 @@ public class VectorTSensibilizadas {
                 }
                 Random rd = new Random();
                 for (int i = 0; i < INV_1.length; i++) {
-                    alfa[INV_1[i]] = 5 + rd.nextInt(5);
-                    beta[INV_1[i]] = alfa[INV_1[i]]+ 50 + rd.nextInt(100);
+                    alfa[INV_1[i]] = 10 + rd.nextInt(5);
+                    beta[INV_1[i]] = alfa[INV_1[i]]+ 100 + rd.nextInt(100);
                     estaEsperando[i]=0;
                 }
                 for (int i = 0; i < INV_2.length; i++) {
-                    alfa[INV_2[i]] = rd.nextInt(5);
-                    beta[INV_2[i]] = alfa[INV_2[i]]+ 50 + rd.nextInt(100);
+                    alfa[INV_2[i]] = 20 + rd.nextInt(10);
+                    beta[INV_2[i]] = alfa[INV_3[i]]+ 100 + rd.nextInt(100);
                     estaEsperando[i]=0;
                 }
                 for (int i = 0; i < INV_3.length; i++) {
-                    alfa[INV_3[i]] = 10 + rd.nextInt(10);
+                    alfa[INV_3[i]] = rd.nextInt(5);
                     beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
                     estaEsperando[i]=0;
                 }
@@ -88,14 +88,8 @@ public class VectorTSensibilizadas {
             if (estamosEnVentana) return true;
             try {
                 estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual,disparo);
-                if (disparo==3){
-                    disparo&=disparo;
-                }
                 if(sensibilizada[disparo]==1) {
                     return true;
-                }
-                else {
-                    return false;
                 }
             } catch (TimeoutException e) {
                 System.out.println("La transición T" + disparo + " se pasó la ventana de tiempo");

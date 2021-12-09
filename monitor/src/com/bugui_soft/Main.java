@@ -18,6 +18,7 @@ public class Main {
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
     public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
     public static final Exchanger<Integer> exchanger = new Exchanger<>();
+    public static boolean finDePrograma= false;
 
     public static void main(String[] args) {
         cargarOperarios();
@@ -45,6 +46,7 @@ public class Main {
     }
 
     public static void finalizarPrograma() {
+        finDePrograma=true;
         monitor.printMarcado();
         System.out.println("Se acabó el programa");
         System.exit(0);

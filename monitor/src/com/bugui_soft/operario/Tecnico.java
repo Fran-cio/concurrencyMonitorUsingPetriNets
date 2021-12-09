@@ -5,6 +5,7 @@ import com.bugui_soft.utils.Rdp;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.bugui_soft.Main.finDePrograma;
 import static com.bugui_soft.Main.monitor;
 
 public class Tecnico implements Runnable {
@@ -17,7 +18,7 @@ public class Tecnico implements Runnable {
 
     public void run() {
         Thread.currentThread().setName("Tecnico");
-        while (!Rdp.milInvariantes) {
+        while (!finDePrograma) {
             monitor.dispararTransicion(tInvariante);
             try {
                 TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_TECNICO_MS);
