@@ -9,7 +9,7 @@ public class Politicas {
     private static final Object lock = new Object();
     private static Politicas politicas;
     private static HashMap<Integer, Integer> mapeoTaTI;//contador(transicion , contador de su invariante)
-    private static Integer[] cuentaTI;//arreglo de las cuentas de dsiparos de los invariantes
+    private static Integer[] cuentaTI; //arreglo de las cuentas de dsiparos de los invariantes
 
 
     private Politicas() { }
@@ -24,7 +24,7 @@ public class Politicas {
                 cuentaTI = new Integer[]{cuentaTI1, cuentaTI2, cuentaTI3};
 
                 //cargamos el mapeo de transiciones -> contador
-                mapeoTaTI = new HashMap<Integer, Integer>();
+                mapeoTaTI = new HashMap<>();
                 //cargamos el Tinvariante 0
                 mapeoTaTI.put(1, 0);
                 mapeoTaTI.put(10, 0);
@@ -77,14 +77,11 @@ public class Politicas {
             cuentaTI[0]++;
         }
         else if(t==9) {
-            //int cont = mapeoTaTI.get(t);
             cuentaTI[2]++;
         }
     }
 
     public boolean milInveriantes(){
-        if(cuentaTI[0]+cuentaTI[1]+cuentaTI[2]>NUMERO_DE_TRANS_A_EJECUTAR)
-            return true;
-        return false;
+        return cuentaTI[0] + cuentaTI[1] + cuentaTI[2] > NUMERO_DE_TRANS_A_EJECUTAR;
     }
 }

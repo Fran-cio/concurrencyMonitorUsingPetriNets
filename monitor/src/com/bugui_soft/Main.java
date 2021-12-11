@@ -18,22 +18,24 @@ public class Main {
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
     public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
     public static final Exchanger<Integer> exchanger = new Exchanger<>();
-    public static boolean finDePrograma= false;
+    public static boolean finDePrograma = false;
 
     public static void main(String[] args) {
         cargarOperarios();
-        //crear y correr hilos
+        //creaamos los hilos
         Thread log = hilosFactory.newThread(logger);
         log.start();
+        //ponemos los hilos de operarios a correr
         for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
         try {
             log.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        /*Una vez que se ejecutan las 1000 transiciones el logger muere, se realiza el join,
+         y se pide finalizar el programa*/
         finalizarPrograma();
     }
-
     private static void cargarOperarios() {
         for (int i = 0; i < CANTIDAD_PRODUCTORES; i++)
             operarios.add(operarioFactory.getOperario(PRODUCTOR));
@@ -46,7 +48,8 @@ public class Main {
     }
 
     public static void finalizarPrograma() {
-        finDePrograma=true;
+        /*los workers velan por este estado, cuando se cumple todos mueren una vez que hayan terminado sus tareas.*/
+        finDePrograma = true;
         monitor.printMarcado();
         System.out.println("Se acabó el programa");
         System.exit(0);

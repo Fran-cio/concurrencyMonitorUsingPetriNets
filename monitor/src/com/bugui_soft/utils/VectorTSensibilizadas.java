@@ -1,10 +1,6 @@
 package com.bugui_soft.utils;
 
-import javax.swing.*;
-
 import static com.bugui_soft.utils.Constantes.*;
-import static com.bugui_soft.utils.Monitor.*;
-
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
@@ -29,23 +25,25 @@ public class VectorTSensibilizadas {
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
                     alfa[i] = 0;
                     beta[i] = Integer.MAX_VALUE;
-                    estaEsperando[i]=0;
+                    estaEsperando[i] = 0;
                 }
                 Random rd = new Random();
                 for (int i = 0; i < INV_1.length; i++) {
-                    alfa[INV_1[i]] = 10 + rd.nextInt(5);
+                    alfa[INV_1[i]] = 5 + rd.nextInt(5);
                     beta[INV_1[i]] = alfa[INV_1[i]]+ 100 + rd.nextInt(100);
                     estaEsperando[i]=0;
                 }
                 for (int i = 0; i < INV_2.length; i++) {
-                    alfa[INV_2[i]] = 20 + rd.nextInt(10);
-                    beta[INV_2[i]] = alfa[INV_3[i]]+ 100 + rd.nextInt(100);
-                    estaEsperando[i]=0;
+                    alfa[INV_2[i]] = 10 + rd.nextInt(10);
+                    beta[INV_2[i]] = alfa[INV_3[i]]+ 200 +
+
+                            rd.nextInt(100);
+                    estaEsperando[i] = 0;
                 }
                 for (int i = 0; i < INV_3.length; i++) {
-                    alfa[INV_3[i]] = rd.nextInt(5);
+                    alfa[INV_3[i]] = rd.nextInt(3);
                     beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
-                    estaEsperando[i]=0;
+                    estaEsperando[i] = 0;
                 }
                 /*
                 Propongo generar algunas tras de alpha 0 para asi tenemos algunas trans temporales y otras que no
@@ -68,15 +66,6 @@ public class VectorTSensibilizadas {
     }
 
     public boolean estaSensibilizado(Integer disparo) {
-        /*
-            TODO: Comentario informativo
-            Fran: No parecen ejecutarse transiciones invalidas, tampoco parece violarse la seccion critica. Si colocan un
-            breakpoint en la linea 73, va ver como siempre que una trans le gana a otra, se da en la transicion, 3. Esto,
-            lleva a darme a entender que esta andando bien, pero como el invariante 1 es el mas sensible a quedar
-            desensibilizado, en la gran mayoria de los casos se da que los otros invariantes le ganan la ventana de trans
-            lo cual lleva a que esa rama tienda a no poder avanzar. De ser este el problema, preferiria optar por quedarme
-            con la otra solucion.
-         */
         if (sensibilizada[disparo] > 0 && estaEsperando[disparo]==0) { //sensibilizado por tokens
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();
@@ -109,7 +98,7 @@ public class VectorTSensibilizadas {
             estaEsperando[disparo]=1;
             if(Monitor.getMutex().availablePermits()!=0) {
                System.out.println("El mutex ha dejado de ser binario");
-               System.exit(1);//Se puede sacar: Si el semaforo deja de ser binario muere aca
+               System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
             }
 
             Monitor.getMutex().release();

@@ -26,7 +26,6 @@ public class Productor implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Simular realizar tarea
         }
     }
 

@@ -5,12 +5,12 @@ import java.io.IOException;
 
 import static com.bugui_soft.utils.Constantes.CONTADOR_DEL_RPOGRAMA;
 import static com.bugui_soft.Main.exchanger;
+import static com.bugui_soft.utils.Constantes.ERROR_EXIT_STATUS;
 
 
 public class CustomLogger implements Runnable {
     private static final Object lock = new Object();
     private static CustomLogger customLogger;
-    private static Integer contador = CONTADOR_DEL_RPOGRAMA;
     private static FileWriter file;
 
     private CustomLogger() { }
@@ -33,6 +33,7 @@ public class CustomLogger implements Runnable {
 
     @Override
     public void run() {
+        /*Va a correr hasta que se ejecuten 1000 transiciones*/
         while (!Rdp.milInvariantes) {
             try {
                 Integer numDisp = exchanger.exchange(null);
@@ -47,8 +48,7 @@ public class CustomLogger implements Runnable {
             file.close();
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(-1);
+            System.exit(ERROR_EXIT_STATUS);
         }
-
     }
 }

@@ -78,7 +78,6 @@ public class Rdp {
                 return false;
             }
             actualizarMarcado(disparo);
-            //isHome = Arrays.equals(rdp.getMarcadoActual(), rdp.getMarcadoInicial());
             milInvariantes = monitor.getPolitica().milInveriantes();
             actualizarTSensibilizadas();
             monitor.getPolitica().incrementarTI(disparo);
@@ -110,7 +109,6 @@ public class Rdp {
         si se ha violado o no el invariante de transicion, comparando el marcado obtenido en el programa y el alcanzado
         en el PIPE. (El formato prensentado en la impresion es la misma que se va a ver en el PIPE)
          */
-        //printMarcadoActual();
         if(!cumpleInvariantesP()) { //Un chequeo mas para verificar la sanidad de la concurrencia
             System.out.println("Se ha violado los invariantes de plaza");
             System.exit(1);
@@ -157,14 +155,6 @@ public class Rdp {
 
     public Integer[] getSensibilizadas() {
         return tSensibilizadasActual.getSensibilizada();
-    }
-
-    public Integer[] getMarcadoInicial() {
-        return marcadoInicial;
-    }
-
-    public Integer[] getMarcadoActual() {
-        return marcadoActual;
     }
 
     /**

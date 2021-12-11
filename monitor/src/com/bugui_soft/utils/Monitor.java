@@ -9,7 +9,7 @@ public class Monitor {
     private final static Object lock = new Object();
     private static Monitor monitor;
     private static Politicas politica;
-    private static final Semaphore mutex = new Semaphore(1); // "cola" de entrada al monitor
+    private static Semaphore mutex; // "cola" de entrada al monitor
     private static Semaphore[] colasCondition; // Array con las colas de condiciones
 
     private Monitor() {}
@@ -19,7 +19,7 @@ public class Monitor {
             if (monitor == null) {
                 monitor = new Monitor();
                 politica = Politicas.getInstanceOfPoliticas();
-                //mutex = new Semaphore(1);
+                mutex = new Semaphore(1);
                 colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
                     colasCondition[i] = new Semaphore(0);
@@ -29,16 +29,14 @@ public class Monitor {
             return monitor;
         }
     }
+
     public void dispararTransicion(Integer[] tInvariantes) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         try {
             mutex.acquire();//entrada al monitor
             Integer[] transPot = getTransPotencialDelOperario(tInvariantes);
-            //Si este Operario tiene transiciones potenciales (Sensibilizadas por el marcado
+            //Si este Operario tiene transiciones potenciales (Sensibilizadas por el marcado)
             if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
-                /*
-                    Me gustaria dejar mejor esta parte
-                */
                 Integer tDisparable = politica.cualDisparar(transPot);
                 Boolean seDisparo = rdp.disparar(tDisparable);
 
@@ -101,7 +99,9 @@ public class Monitor {
 
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            //si hay  transiciones sensibilizadas de ese operario
+            /* llama a un wrapper para obtenner la transiciones sensibilizadas, y hace la multiplicación para saber si
+            * se corresponde con una transición del hilo, si esto es así va a ser una transición sensibilizada,
+            * sino no*/
             aux[i] = rdp.getSensibilizadas()[i] * tInvariantes[i];
         }
         return aux;
