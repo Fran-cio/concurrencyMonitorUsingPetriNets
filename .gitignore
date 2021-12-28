@@ -24,7 +24,7 @@
 *.out
 *.class
 
-*out/production/monitor/com/bugui_soft
+./monitor/out/*
 # Drive Files
 *.ini
 
