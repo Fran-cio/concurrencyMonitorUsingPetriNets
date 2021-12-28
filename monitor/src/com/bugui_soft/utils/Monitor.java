@@ -30,6 +30,15 @@ public class Monitor {
         }
     }
 
+    /**
+     * Los hilos intentan dispararse en exclusion mutua. Cuando un hilo tiene el mutex, este va a verificar si puede disparar,
+     * le va a preguntar a la politica cual disparar, y va verificar el sensibilizado para dispararlo. Si esta previo
+     * a la ventana temporal, espera y libera el mutex. Si esta en la ventana, dispara, actualiza el marcado y devuelve
+     * el mutex. Si estaba fuera de la ventana, se va a la cola de condicion de esa transcicion, y cuando se pueda volver
+     * a disparar, se va lo va a liberar.
+     *
+     * @param tInvariantes transiciones que pueden hacer esos hilos en particular
+     */
     public void dispararTransicion(Integer[] tInvariantes) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         try {
@@ -57,14 +66,14 @@ public class Monitor {
     }
 
     /**
-     * Pregunta si hay alguien en una cola de condición, en ese caso le da el mutex a él, y sino lo libera
+     * Pregunta si hay alguien en una cola de condición, en ese caso le da el mutex a él, y sino lo libera. La politica
+     * de señalizado elegida es Signal And Exit
      */
     private void exit() {
         Integer[] transicionesEjecutables = getTransPotencialColas();
         boolean hayHilosEsperando = Arrays.stream(transicionesEjecutables).anyMatch(n -> n > 0);
         if (hayHilosEsperando) {
             Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
-
             colasCondition[cualDisparar].release();
         } else {
             if(mutex.availablePermits()!=0){
@@ -76,7 +85,7 @@ public class Monitor {
     }
 
     /**
-     * Devuelve los hilos que estan en las colas de condición que estan listos para ejecutarse, esdecir
+     * Devuelve los hilos que estan en las colas de condición que estan listos para ejecutarse, es decir
      * que tienen transiciones sensibilizadas
      */
 

@@ -1,3 +1,11 @@
+/*
+ * VectorTSensibilizadas
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft.utils;
 
 import static com.bugui_soft.utils.Constantes.*;
@@ -10,9 +18,10 @@ public class VectorTSensibilizadas {
     private static Integer[] alfa;
     private static Integer[] beta;
     private static Integer[] sensibilizada;
-    private static Integer[] estaEsperando;
+    private static Boolean[] estaEsperando;
 
-    private VectorTSensibilizadas() {}
+    private VectorTSensibilizadas() {
+    }
 
     public static VectorTSensibilizadas getInstanceOfVectorTSensibilizadas(Integer[] transiciones) {
         synchronized (lock) {
@@ -20,30 +29,28 @@ public class VectorTSensibilizadas {
                 vectorTSensibilizadas = new VectorTSensibilizadas();
                 alfa = new Integer[CANTIDAD_TRANSICIONES];
                 beta = new Integer[CANTIDAD_TRANSICIONES];
-                estaEsperando= new Integer[CANTIDAD_TRANSICIONES];
+                estaEsperando= new Boolean[CANTIDAD_TRANSICIONES];
 
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
                     alfa[i] = 0;
                     beta[i] = Integer.MAX_VALUE;
-                    estaEsperando[i] = 0;
+                    estaEsperando[i] = false;
                 }
                 Random rd = new Random();
                 for (int i = 0; i < INV_1.length; i++) {
                     alfa[INV_1[i]] = 5 + rd.nextInt(5);
                     beta[INV_1[i]] = alfa[INV_1[i]]+ 100 + rd.nextInt(100);
-                    estaEsperando[i]=0;
+                    estaEsperando[i] = false;
                 }
                 for (int i = 0; i < INV_2.length; i++) {
                     alfa[INV_2[i]] = 10 + rd.nextInt(10);
-                    beta[INV_2[i]] = alfa[INV_3[i]]+ 200 +
-
-                            rd.nextInt(100);
-                    estaEsperando[i] = 0;
+                    beta[INV_2[i]] = alfa[INV_3[i]]+ 200 + rd.nextInt(100);
+                    estaEsperando[i] = false;
                 }
                 for (int i = 0; i < INV_3.length; i++) {
                     alfa[INV_3[i]] = rd.nextInt(3);
                     beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
-                    estaEsperando[i] = 0;
+                    estaEsperando[i] = false;
                 }
                 /*
                 Propongo generar algunas tras de alpha 0 para asi tenemos algunas trans temporales y otras que no
@@ -65,8 +72,17 @@ public class VectorTSensibilizadas {
         return sensibilizada;
     }
 
+    /**
+     * Se chequea si esta sensibilizada tanto de token como temporalmente, si es asi, avanza e intenta dispararse
+     *
+     * @param disparo: Numero transicion a dispararse
+     * @return Si se pudo disparar o no
+     **/
     public boolean estaSensibilizado(Integer disparo) {
-        if (sensibilizada[disparo] > 0 && estaEsperando[disparo]==0) { //sensibilizado por tokens
+        if (sensibilizada[disparo] > 0 && !estaEsperando[disparo]) {
+            /*
+             * Si esta sensibilizado por tokens y no hay ningun hilo ya esperando por esa transicion, entra a este if
+             */
             Long[] timeStamp = Rdp.getTimeStamp();
             long tiempoActual = System.currentTimeMillis();
             long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
@@ -90,12 +106,14 @@ public class VectorTSensibilizadas {
         return false;
     }
 
-/**Espera el tiempo necesario para disparar en caso de superar la ventana.
+/**
+ * Espera el tiempo necesario para disparar en caso de superar la ventana.
+ *
  * @exception TimeoutException porque superó el tiempo máximo de la ventana.
- * */
+ **/
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual,Integer disparo) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
-            estaEsperando[disparo]=1;
+            estaEsperando[disparo]=true;
             if(Monitor.getMutex().availablePermits()!=0) {
                System.out.println("El mutex ha dejado de ser binario");
                System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
@@ -109,7 +127,7 @@ public class VectorTSensibilizadas {
                 e.printStackTrace();
             }
             Monitor.getMutex().acquire();
-            estaEsperando[disparo]=0;
+            estaEsperando[disparo]=false;
         } else {
             throw new TimeoutException();
         }

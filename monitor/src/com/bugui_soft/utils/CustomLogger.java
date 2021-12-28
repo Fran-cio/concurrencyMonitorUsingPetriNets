@@ -1,12 +1,18 @@
+/*
+ * CustomLogger
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.bugui_soft.utils.Constantes.CONTADOR_DEL_RPOGRAMA;
 import static com.bugui_soft.Main.exchanger;
 import static com.bugui_soft.utils.Constantes.ERROR_EXIT_STATUS;
-
 
 public class CustomLogger implements Runnable {
     private static final Object lock = new Object();
@@ -36,6 +42,10 @@ public class CustomLogger implements Runnable {
         /*Va a correr hasta que se ejecuten 1000 transiciones*/
         while (!Rdp.milInvariantes) {
             try {
+                /*
+                 * Para loggear la transicion que se disparo se utilizo una primitiva llamada exchanger vista en clase
+                 * que intercambia mensajes entre los hilos que se disparan y se quede esperando los mensajes
+                 */
                 Integer numDisp = exchanger.exchange(null);
                 System.out.println("T" + numDisp);
                 file.write("T" + numDisp + " ");

@@ -1,15 +1,18 @@
+/*
+ * Main
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft;
 
 import java.util.ArrayList;
 import java.util.concurrent.Exchanger;
 import com.bugui_soft.utils.*;
 import static com.bugui_soft.utils.Constantes.*;
-/*
-TODO:
-    -Interrumpir cada hilo por separado asi no matamos todo de una
-    -Comentar bien todo lo que falta
-    -Comprender correctamente los elementos del codigo
- */
+// TODO: Preguntar a juan si le parecen bien como estan puestos los invariantes en elos operarios (Creo que fue el que lo hizo)
 public class Main {
     //crear el monitor
     private static final OperarioFactory operarioFactory = OperarioFactory.getInstanceOfOperarioFactory();
@@ -18,38 +21,41 @@ public class Main {
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
     public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
     public static final Exchanger<Integer> exchanger = new Exchanger<>();
-    public static boolean finDePrograma = false;
+    public static boolean finDePrograma= false;
 
     public static void main(String[] args) {
         cargarOperarios();
-        //creaamos los hilos
+        //crear y correr hilos
         Thread log = hilosFactory.newThread(logger);
         log.start();
-        //ponemos los hilos de operarios a correr
         for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
         try {
             log.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /*Una vez que se ejecutan las 1000 transiciones el logger muere, se realiza el join,
-         y se pide finalizar el programa*/
         finalizarPrograma();
     }
+
+    /**
+     *  Esta funcion utiliza la clase factory y acumula los objetos en un arreglo
+     */
     private static void cargarOperarios() {
-        for (int i = 0; i < CANTIDAD_PRODUCTORES; i++)
+        for (int i = 0; i < CANTIDAD_PRODUCTORES; i++) {
             operarios.add(operarioFactory.getOperario(PRODUCTOR));
-
-        for (int i = 0; i < CANTIDAD_TECNICOS; i++)
+        }
+        for (int i = 0; i < CANTIDAD_TECNICOS; i++) {
             operarios.add(operarioFactory.getOperario(TECNICO));
-
+        }
         operarios.add(operarioFactory.getOperario(DESCARTADOR));
         operarios.add(operarioFactory.getOperario(CALIDAD));
     }
 
+    /**
+     * Cuando log termina de escribir se ejecuta esta funcion que termina la ejecucion.
+     */
     public static void finalizarPrograma() {
-        /*los workers velan por este estado, cuando se cumple todos mueren una vez que hayan terminado sus tareas.*/
-        finDePrograma = true;
+        finDePrograma=true;
         monitor.printMarcado();
         System.out.println("Se acabó el programa");
         System.exit(0);

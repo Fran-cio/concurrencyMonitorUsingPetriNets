@@ -1,3 +1,11 @@
+/*
+ * OperarioFactory
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft.utils;
 
 import com.bugui_soft.operario.*;
@@ -26,6 +34,10 @@ public class OperarioFactory {
             return operarioFactory;
         }
     }
+
+    /**
+     * Se implementa el patron Factory para obtener una instacia del operario que se pida.
+     */
     public Runnable getOperario(String nombre) {
         return mapa.get(nombre);
     }
