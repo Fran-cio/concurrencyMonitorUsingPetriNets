@@ -1,3 +1,11 @@
+/*
+ * Tecnico
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;

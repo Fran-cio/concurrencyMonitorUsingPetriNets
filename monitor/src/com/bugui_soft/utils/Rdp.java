@@ -1,11 +1,17 @@
-package com.bugui_soft.utils;
+/*
+ * Rdp
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
 
+package com.bugui_soft.utils;
 
 import java.util.Arrays;
 
 import static com.bugui_soft.Main.*;
-import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
-import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
+import static com.bugui_soft.utils.Constantes.*;
 import static com.bugui_soft.utils.Utilidades.*;
 
 public class Rdp {
@@ -13,10 +19,9 @@ public class Rdp {
     private static final Object lock = new Object();
     private static Rdp rdp;
     private static Integer[][] mtxIncidencia; //matriz de incidencia
-    private static Integer[] marcadoInicial; //marcado inicial
     private static Integer[] marcadoActual;
     private static Long[] timeStamp;//X0, tiempo de sensibilizado inicial
-    private static VectorTSensibilizadas tSensibilizadasActual;
+    private static VectorTSensibilizadas transicionesSensibilizadasActual;
 
     public static boolean milInvariantes;
 
@@ -47,12 +52,13 @@ public class Rdp {
                         {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
                         {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
 
-                marcadoInicial = new Integer[]{3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
-                marcadoActual = marcadoInicial.clone();
+                //marcado inicial
+                marcadoActual = MARCADO_INICIAL.clone();
 
                 //array de estado de sensibilización de transiciones
-                Integer[] tSensibilizadasInicial = genTSensibilizadas();
-                tSensibilizadasActual = VectorTSensibilizadas.getInstanceOfVectorTSensibilizadas(tSensibilizadasInicial);
+                Integer[] transicionesSensibilizadasInicial = generarTransicionesSensibilizadas();
+                transicionesSensibilizadasActual =
+                        VectorTSensibilizadas.getInstanceOfVectorTSensibilizadas(transicionesSensibilizadasInicial);
                 timeStamp = new Long[CANTIDAD_TRANSICIONES];
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
                     timeStamp[i] = System.currentTimeMillis();
@@ -70,7 +76,7 @@ public class Rdp {
      */
 
     public Boolean disparar(Integer disparo) {
-        if (tSensibilizadasActual.estaSensibilizado(disparo)) {
+        if (transicionesSensibilizadasActual.estaSensibilizado(disparo)) {
             try {
                 exchanger.exchange(disparo);
             } catch (InterruptedException e) {
@@ -99,7 +105,7 @@ public class Rdp {
     }
 
     public void actualizarTSensibilizadas() {
-        Integer[] nuevoTS = genTSensibilizadas();
+        Integer[] nuevoTS = generarTransicionesSensibilizadas();
         //cuando hay un cambio en las sensibilizadas, actualizamos el tiempo inicial de sensibilizado
         setTimeStamp(nuevoTS);
         setSensibilizadas(nuevoTS);
@@ -115,7 +121,7 @@ public class Rdp {
         }
     }
 
-    private static Integer[] genTSensibilizadas() {
+    private static Integer[] generarTransicionesSensibilizadas() {
         //creo un arreglo inicializado en 1 por defecto
         Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
@@ -150,11 +156,11 @@ public class Rdp {
     }
 
     private void setSensibilizadas(Integer[] nuevaTS) {
-        tSensibilizadasActual.setSensibilizado(nuevaTS);
+        transicionesSensibilizadasActual.setSensibilizado(nuevaTS);
     }
 
     public Integer[] getSensibilizadas() {
-        return tSensibilizadasActual.getSensibilizada();
+        return transicionesSensibilizadasActual.getSensibilizada();
     }
 
     /**
@@ -162,7 +168,7 @@ public class Rdp {
      **/
     public void setTimeStamp(Integer[] nuevaTS) {
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            if (!nuevaTS[i].equals(tSensibilizadasActual.getSensibilizada()[i])) {
+            if (!nuevaTS[i].equals(transicionesSensibilizadasActual.getSensibilizada()[i])) {
                 timeStamp[i] = System.currentTimeMillis();
             }
         }

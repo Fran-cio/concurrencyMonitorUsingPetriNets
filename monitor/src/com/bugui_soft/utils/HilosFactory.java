@@ -1,3 +1,10 @@
+/*
+ * Hilos factory
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
 package com.bugui_soft.utils;
 
 import java.util.concurrent.ThreadFactory;

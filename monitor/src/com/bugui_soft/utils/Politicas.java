@@ -1,3 +1,11 @@
+/*
+ * Politicas
+ *
+ * Version 1.0
+ *
+ * Copyright BeerWare
+ */
+
 package com.bugui_soft.utils;
 
 import java.util.HashMap;
@@ -8,36 +16,37 @@ import static com.bugui_soft.utils.Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
 public class Politicas {
     private static final Object lock = new Object();
     private static Politicas politicas;
-    private static HashMap<Integer, Integer> mapeoTaTI;//contador(transicion , contador de su invariante)
-    private static Integer[] cuentaTI; //arreglo de las cuentas de dsiparos de los invariantes
+    private static HashMap<Integer, Integer> mapeoTransicionConInvariante;//contador(transicion, contador de su invariante)
+    private static Integer[] cuentaDeInvariantes; //arreglo de las cuentas de disparos de los invariantes
 
 
-    private Politicas() { }
+    private Politicas() {
+    }
 
     public static Politicas getInstanceOfPoliticas() {
         synchronized (lock) {
             if (politicas == null) {
                 politicas = new Politicas();
-                int cuentaTI1 = 0;//cuentas del disparo del invariante de transicion 1
-                int cuentaTI2 = 0;//cuentas del disparo del invariante de transicion 2
-                int cuentaTI3 = 0;//cuentas del disparo del invariante de transicion 3
-                cuentaTI = new Integer[]{cuentaTI1, cuentaTI2, cuentaTI3};
+                int cuentaDeInvariantes1 = 0;//cuentas del disparo del invariante de transicion 1
+                int cuentaDeInvariantes2 = 0;//cuentas del disparo del invariante de transicion 2
+                int cuentaDeInvariantes3 = 0;//cuentas del disparo del invariante de transicion 3
+                cuentaDeInvariantes = new Integer[]{cuentaDeInvariantes1, cuentaDeInvariantes2, cuentaDeInvariantes3};
 
                 //cargamos el mapeo de transiciones -> contador
-                mapeoTaTI = new HashMap<>();
+                mapeoTransicionConInvariante = new HashMap<>();
                 //cargamos el Tinvariante 0
-                mapeoTaTI.put(1, 0);
-                mapeoTaTI.put(10, 0);
+                mapeoTransicionConInvariante.put(1, 0);
+                mapeoTransicionConInvariante.put(10, 0);
                 //cargamos el Tinvariante 1
                 for (int i = 2; i < 6; i++) {
-                    mapeoTaTI.put(i, 1);
+                    mapeoTransicionConInvariante.put(i, 1);
                 }
                 //cargamos el Tinvariante 2
                 for (int i = 6; i < 10; i++) {
-                    mapeoTaTI.put(i, 2);
+                    mapeoTransicionConInvariante.put(i, 2);
                 }
                 //Ignoramos los conlflictos
-                mapeoTaTI.put(0, null);
+                mapeoTransicionConInvariante.put(0, null);
             } else {
                 System.out.println("Ya existe una instancia de politicas, no se creará otra");
             }
@@ -60,9 +69,9 @@ public class Politicas {
         }
         //chequeo las transiciones comunes
         for (int i = 1; i < CANTIDAD_TRANSICIONES; i++) {
-            int invSelected = mapeoTaTI.get(i);
-            if ((cuentaTI[invSelected] < minimo) && (transPot[i] != 0)) { //cuentaTI[invSelected] devuelve la cantidad de veces que se disparó ese invariante
-                minimo = cuentaTI[invSelected];
+            int invSelected = mapeoTransicionConInvariante.get(i);
+            if ((cuentaDeInvariantes[invSelected] < minimo) && (transPot[i] != 0)) { //cuentaTI[invSelected] devuelve la cantidad de veces que se disparó ese invariante
+                minimo = cuentaDeInvariantes[invSelected];
                 posMin = i;
             }
         }
@@ -70,18 +79,18 @@ public class Politicas {
         return posMin;
     }
 
-    public void incrementarTI(Integer t) {
-        if (t == 5) {//es el conflicto
-            cuentaTI[1]++;
-        } else if(t ==10) {
-            cuentaTI[0]++;
+    public void incrementarTI(Integer transicion) {
+        if (transicion == 5) {//es el conflicto
+            cuentaDeInvariantes[1]++;
+        } else if(transicion ==10) {
+            cuentaDeInvariantes[0]++;
         }
-        else if(t==9) {
-            cuentaTI[2]++;
+        else if(transicion==9) {
+            cuentaDeInvariantes[2]++;
         }
     }
 
     public boolean milInveriantes(){
-        return cuentaTI[0] + cuentaTI[1] + cuentaTI[2] > NUMERO_DE_TRANS_A_EJECUTAR;
+        return cuentaDeInvariantes[0] + cuentaDeInvariantes[1] + cuentaDeInvariantes[2] > NUMERO_DE_TRANS_A_EJECUTAR;
     }
 }

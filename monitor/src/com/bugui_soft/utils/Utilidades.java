@@ -21,6 +21,9 @@ public class Utilidades {
         return productoMatricial;
     }
 
+    /**
+     * Es la suma vectorial estandar
+     */
     public static Integer[] sumarVectores(Integer[] vector1, Integer[] vector2) {
         Integer[] resultante = new Integer[CANTIDAD_PLAZAS];
         for (int i = 0; i < CANTIDAD_PLAZAS; i++) {
