@@ -22,7 +22,14 @@ public class VectorTSensibilizadas {
 
     private VectorTSensibilizadas() {
     }
-
+/**
+ * Los criterios para que tiempos asignar a cada invariante son con el unico fin de un funcionamiento correcto, notamos
+ * que hay problemas en la temporizacion cuando el tiempo del invariante 3 es demasiado grande, por lo tanto se temporizo
+ * dentro de un umbral alfa donde no nos cause problemas al momento de ejecutar el programa. Los Beta son para que haya
+ * un conjunto de pasos de ventana para que se vea que se pueden dar porque que no afecten la el avance de la red.
+ *
+ * Todos los tiempos estan dados en mili segundos.
+ */
     public static VectorTSensibilizadas getInstanceOfVectorTSensibilizadas(Integer[] transiciones) {
         synchronized (lock) {
             if (vectorTSensibilizadas == null) {
@@ -52,10 +59,6 @@ public class VectorTSensibilizadas {
                     beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
                     estaEsperando[i] = false;
                 }
-                /*
-                Propongo generar algunas tras de alpha 0 para asi tenemos algunas trans temporales y otras que no
-                 */
-
                 sensibilizada = transiciones;
             } else {
                 System.out.println("Ya existe una instancia de vector t sensibilizadas, no se creará otra");
