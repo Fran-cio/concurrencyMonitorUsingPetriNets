@@ -79,7 +79,7 @@ public class Politicas {
         return posMin;
     }
 
-    public void incrementarTI(Integer transicion) {
+    public void incrementarInvariante(Integer transicion) {
         if (transicion == 5) {//es el conflicto
             cuentaDeInvariantes[1]++;
         } else if(transicion ==10) {

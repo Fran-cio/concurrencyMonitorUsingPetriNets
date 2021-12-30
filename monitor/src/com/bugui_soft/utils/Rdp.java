@@ -86,7 +86,7 @@ public class Rdp {
             actualizarMarcado(disparo);
             milInvariantes = monitor.getPolitica().milInveriantes();
             actualizarTSensibilizadas();
-            monitor.getPolitica().incrementarTI(disparo);
+            monitor.getPolitica().incrementarInvariante(disparo);
             return true;
         }
         return false;
