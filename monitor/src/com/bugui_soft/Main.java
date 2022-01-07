@@ -20,17 +20,22 @@ public class Main {
     private static final HilosFactory hilosFactory = HilosFactory.getInstanceOfThreadFactory();
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
     public static final CustomLogger logger = CustomLogger.getInstanceOfCustomLogger();
-    public static final Exchanger<Integer> exchanger = new Exchanger<>();
+    public static final Interfaz interfaz = Interfaz.getInstanceOfInterfaz();
+    public static final Exchanger<Integer> exchangerLogger = new Exchanger<>();
+    public static final Exchanger<Integer[]> exchangerGUI = new Exchanger<>();
     public static boolean finDePrograma= false;
 
     public static void main(String[] args) {
         cargarOperarios();
         //crear y correr hilos
+        Thread GUI = hilosFactory.newThread(interfaz);
         Thread log = hilosFactory.newThread(logger);
         log.start();
+        GUI.start();
         for (Runnable operario : operarios) hilosFactory.newThread(operario).start();
         try {
             log.join();
+            GUI.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,8 +61,7 @@ public class Main {
      */
     public static void finalizarPrograma() {
         finDePrograma=true;
-        monitor.printMarcado();
         System.out.println("Se acabó el programa");
-        System.exit(0);
+        //System.exit(0);
     }
 }

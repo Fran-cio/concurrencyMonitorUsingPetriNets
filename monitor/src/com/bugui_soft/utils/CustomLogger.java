@@ -11,7 +11,7 @@ package com.bugui_soft.utils;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.bugui_soft.Main.exchanger;
+import static com.bugui_soft.Main.exchangerLogger;
 import static com.bugui_soft.utils.Constantes.ERROR_EXIT_STATUS;
 
 public class CustomLogger implements Runnable {
@@ -40,23 +40,18 @@ public class CustomLogger implements Runnable {
     @Override
     public void run() {
         /*Va a correr hasta que se ejecuten 1000 transiciones*/
-        while (!Rdp.milInvariantes) {
-            try {
-                /*
-                 * Para loggear la transicion que se disparo se utilizo una primitiva llamada exchanger vista en clase
-                 * que intercambia mensajes entre los hilos que se disparan y se quede esperando los mensajes
-                 */
-                Integer numDisp = exchanger.exchange(null);
-                System.out.println("T" + numDisp);
-                file.write("T" + numDisp + " ");
-                file.flush();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
         try {
+            while (!Rdp.milInvariantes) {
+                    /*
+                     * Para loggear la transicion que se disparo se utilizo una primitiva llamada exchanger vista en clase
+                     * que intercambia mensajes entre los hilos que se disparan y se quede esperando los mensajes
+                     */
+                    Integer numDisp = exchangerLogger.exchange(null);
+                    file.write("T" + numDisp + " ");
+                    file.flush();
+            }
             file.close();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             System.exit(ERROR_EXIT_STATUS);
         }
