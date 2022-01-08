@@ -38,27 +38,9 @@ public class VectorTSensibilizadas {
                 beta = new Integer[CANTIDAD_TRANSICIONES];
                 estaEsperando= new Boolean[CANTIDAD_TRANSICIONES];
 
-                for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-                    alfa[i] = 0;
-                    beta[i] = Integer.MAX_VALUE;
-                    estaEsperando[i] = false;
-                }
-                Random rd = new Random();
-                for (int i = 0; i < INV_1.length; i++) {
-                    alfa[INV_1[i]] = 5 + rd.nextInt(5);
-                    beta[INV_1[i]] = alfa[INV_1[i]]+ 100 + rd.nextInt(100);
-                    estaEsperando[i] = false;
-                }
-                for (int i = 0; i < INV_2.length; i++) {
-                    alfa[INV_2[i]] = 10 + rd.nextInt(10);
-                    beta[INV_2[i]] = alfa[INV_3[i]]+ 200 + rd.nextInt(100);
-                    estaEsperando[i] = false;
-                }
-                for (int i = 0; i < INV_3.length; i++) {
-                    alfa[INV_3[i]] = rd.nextInt(3);
-                    beta[INV_3[i]] = alfa[INV_3[i]]+ 50 + rd.nextInt(100);
-                    estaEsperando[i] = false;
-                }
+                vectorTSensibilizadas.setVentanasTemporalesBase();
+                vectorTSensibilizadas.setVentanasTemporales();
+
                 sensibilizada = transiciones;
             } else {
                 System.out.println("Ya existe una instancia de vector t sensibilizadas, no se creará otra");
@@ -133,6 +115,46 @@ public class VectorTSensibilizadas {
             estaEsperando[disparo]=false;
         } else {
             throw new TimeoutException();
+        }
+    }
+
+    /**
+     * Se asignan valores base para las temporizaciones, los cuales funcionan como si no hubiera semantica temporal
+     * corriendo
+     */
+    private void setVentanasTemporalesBase(){
+        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
+            alfa[i] = 0;
+            beta[i] = Integer.MAX_VALUE;
+            estaEsperando[i] = false;
+        }
+    }
+
+    /**
+     * Se asignan las ventanas temporales, en base a los valores dados en la clase constantes. Estos estan definidos en
+     * base a valores que se consideran que se comportan correctamente, siendo este, que la carga de invariantes no se
+     * afecte y que ademas no se exageren la cantidad de ventanas superadas.
+     */
+    private void setVentanasTemporales(){
+        Random rd = new Random();
+
+        for (int i = 0; i < INV_1.length; i++) {
+            alfa[INV_1[i]] = REFERENCIA_INVARIANTE_1 + rd.nextInt(REFERENCIA_INVARIANTE_1);
+            beta[INV_1[i]] = alfa[INV_1[i]]+ REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_1*ANCHO_DE_VENTANA);
+            estaEsperando[i] = false;
+        }
+        for (int i = 0; i < INV_2.length; i++) {
+            alfa[INV_2[i]] = REFERENCIA_INVARIANTE_2 + rd.nextInt(REFERENCIA_INVARIANTE_2);
+            beta[INV_2[i]] = alfa[INV_2[i]]+ REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_2*ANCHO_DE_VENTANA);
+            estaEsperando[i] = false;
+        }
+        for (int i = 0; i < INV_3.length; i++) {
+            alfa[INV_3[i]] = rd.nextInt(REFERENCIA_INVARIANTE_3);
+            beta[INV_3[i]] = alfa[INV_3[i]]+ REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_3*ANCHO_DE_VENTANA);
+            estaEsperando[i] = false;
         }
     }
 }
