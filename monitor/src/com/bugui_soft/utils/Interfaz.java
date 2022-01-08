@@ -15,6 +15,7 @@ public class Interfaz extends JFrame implements Runnable{
     private JProgressBar progressBar2;
     private JProgressBar progressBar3;
     private JLabel Marcado;
+    private JLabel Titulo;
 
     private Interfaz() { }
 
