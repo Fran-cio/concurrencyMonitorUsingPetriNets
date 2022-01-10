@@ -78,7 +78,7 @@ public class Rdp {
     public Boolean disparar(Integer disparo) {
         if (transicionesSensibilizadasActual.estaSensibilizado(disparo)) {
             try {
-                exchanger.exchange(disparo);
+                exchangerLogger.exchange(disparo);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 return false;
@@ -178,12 +178,15 @@ public class Rdp {
         return timeStamp;
     }
 
-    public void printMarcadoActual(){
-        System.out.print("[");
-        for (int i = 0; i< CANTIDAD_PLAZAS; i++) {
-            System.out.print(marcadoActual[i] + ",");
+    public String printMarcadoActual() {
+        StringBuilder texto = new StringBuilder();
+        texto.append("[");
+        int i;
+        for (i = 0; i < (CANTIDAD_PLAZAS - 1); i++) {
+            texto.append(marcadoActual[i]).append(",");
         }
-        System.out.print("]\n");
+        texto.append(marcadoActual[i]).append("]\n");
+        return texto.toString();
     }
 }
 

@@ -10,6 +10,7 @@ package com.bugui_soft.utils;
 
 import java.util.HashMap;
 
+import static com.bugui_soft.Main.exchangerGUI;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 import static com.bugui_soft.utils.Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
 
@@ -80,6 +81,7 @@ public class Politicas {
     }
 
     public void incrementarInvariante(Integer transicion) {
+        try {
         if (transicion == 5) {//es el conflicto
             cuentaDeInvariantes[1]++;
         } else if(transicion ==10) {
@@ -87,6 +89,10 @@ public class Politicas {
         }
         else if(transicion==9) {
             cuentaDeInvariantes[2]++;
+        }
+        exchangerGUI.exchange(cuentaDeInvariantes);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

@@ -124,7 +124,7 @@ public class Monitor {
         return mutex;
     }
 
-    public void printMarcado() {
-        rdp.printMarcadoActual();
+    public String printMarcado() {
+        return rdp.printMarcadoActual();
     }
 }
