@@ -8,6 +8,8 @@
 
 package com.bugui_soft.utils;
 
+import com.bugui_soft.Main;
+
 import static com.bugui_soft.utils.Constantes.*;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
@@ -18,7 +20,7 @@ public class VectorTSensibilizadas {
     private static Integer[] alfa;
     private static Integer[] beta;
     private static Integer[] sensibilizada;
-    private static Boolean[] estaEsperando;
+    public static Boolean[] estaEsperando;
 
     private VectorTSensibilizadas() {
     }
@@ -103,6 +105,8 @@ public class VectorTSensibilizadas {
                System.out.println("El mutex ha dejado de ser binario");
                System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
             }
+            //Antes de irse a dormir, libera otra transicion potencial
+            Main.monitor.liberarUno();
 
             Monitor.getMutex().release();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
@@ -138,23 +142,20 @@ public class VectorTSensibilizadas {
     private void setVentanasTemporales(){
         Random rd = new Random();
 
-        for (int i = 0; i < INV_1.length; i++) {
-            alfa[INV_1[i]] = REFERENCIA_INVARIANTE_1 + rd.nextInt(REFERENCIA_INVARIANTE_1);
-            beta[INV_1[i]] = alfa[INV_1[i]]+ REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_1*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : INV_1) {
+            alfa[integer] = REFERENCIA_INVARIANTE_1 + rd.nextInt(REFERENCIA_INVARIANTE_1);
+            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA);
         }
-        for (int i = 0; i < INV_2.length; i++) {
-            alfa[INV_2[i]] = REFERENCIA_INVARIANTE_2 + rd.nextInt(REFERENCIA_INVARIANTE_2);
-            beta[INV_2[i]] = alfa[INV_2[i]]+ REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_2*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : INV_2) {
+            alfa[integer] = REFERENCIA_INVARIANTE_2 + rd.nextInt(REFERENCIA_INVARIANTE_2);
+            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA);
         }
-        for (int i = 0; i < INV_3.length; i++) {
-            alfa[INV_3[i]] = rd.nextInt(REFERENCIA_INVARIANTE_3);
-            beta[INV_3[i]] = alfa[INV_3[i]]+ REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_3*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : INV_3) {
+            alfa[integer] = rd.nextInt(REFERENCIA_INVARIANTE_3);
+            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
+                    rd.nextInt(REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA);
         }
     }
 }

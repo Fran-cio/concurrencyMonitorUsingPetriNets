@@ -18,10 +18,10 @@ public final class Constantes {
     public static final Integer[] MARCADO_INICIAL= {3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
     public static final Integer CANTIDAD_PLAZAS = 18;
     public static final Integer CANTIDAD_TRANSICIONES = 11;
+    /*---------------------------------------Temporilizacion-----------------------------------------------------------------*/
     public static final Integer[] INV_1={1,10};
     public static final Integer[] INV_2={3,4,5}; //Saco T2 porque el profe lo recomendo
     public static final Integer[] INV_3={7,8,9};
-    /*---------------------------------------Temporilizacion-----------------------------------------------------------------*/
     public static final Integer REFERENCIA_INVARIANTE_1 = 5;
     public static final Integer REFERENCIA_INVARIANTE_2 = 10;
     public static final Integer REFERENCIA_INVARIANTE_3 = 3;
