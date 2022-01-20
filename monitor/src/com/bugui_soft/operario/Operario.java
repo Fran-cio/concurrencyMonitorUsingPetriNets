@@ -20,10 +20,10 @@ public abstract class Operario {
     protected void aTrabajar(Integer tiempoDeTrabajo){
         while (!finDePrograma) {
             for (Integer transicion : tInvariante) {
-                while (!monitor.dispararTransicion(transicion)) {
+                while (!monitor.cambiarEstadoDeRed(transicion)) {
 
                 }
-                //if (finDePrograma) break;
+                if (finDePrograma) break;
                 try {
                     TimeUnit.MILLISECONDS.sleep(tiempoDeTrabajo);
                 } catch (InterruptedException e) {

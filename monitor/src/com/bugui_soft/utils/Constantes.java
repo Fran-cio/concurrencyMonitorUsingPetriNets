@@ -18,13 +18,13 @@ public final class Constantes {
     public static final Integer CANTIDAD_PLAZAS = 18;
     public static final Integer CANTIDAD_TRANSICIONES = 11;
     /*---------------------------------------Temporilizacion-----------------------------------------------------------------*/
-    public static final Integer[] INV_1={1,10};   //! TODO: nombre muy confuso no es un invariante en si, es un auxiliar!
-    public static final Integer[] INV_2={3,4,5}; //TODO: se saco Saco T0, T2* y T6* porque el profe lo recomendo (?) no lo termine de captar pero funciono like, despues expliquenmelo thx by juli
-    public static final Integer[] INV_3={7,8,9}; 
-    public static final Integer REFERENCIA_INVARIANTE_1 = 2;
-    public static final Integer REFERENCIA_INVARIANTE_2 = 2;//TODO: nombre confuso , cambiarlo
-    public static final Integer REFERENCIA_INVARIANTE_3 = 2;
-    public static final Integer ANCHO_DE_VENTANA = 4;
+    public static final Integer[] TRANS_TEMP_DE_INV_1 ={1,10};
+    public static final Integer[] TRANS_TEMP_DE_INV_2 ={3,4,5};
+    public static final Integer[] TRANS_TEMP_DE_INV_3 ={7,8,9};
+    public static final Integer TIEMPO_MAXIMO_INVARIANTE_1 = 5;
+    public static final Integer TIEMPO_MAXIMO_INVARIANTE_2 = 10;
+    public static final Integer TIEMPO_MAXIMO_INVARIANTE_3 = 3;
+    public static final Integer ANCHO_DE_VENTANA = 20;
     /*---------------------------------------Ejecución-----------------------------------------------------------------*/
     public static final Integer NUMERO_DE_TRANS_A_EJECUTAR=1000;
     public static final Integer ERROR_EXIT_STATUS = -1;

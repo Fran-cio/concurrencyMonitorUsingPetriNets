@@ -108,7 +108,7 @@ public class VectorTSensibilizadas {
 
 
             //Antes de irse a dormir, libera otra transicion potencial
-            Main.monitor.exit(); //! TODO: aca esta el crimen linea 111 y 118
+            Main.monitor.notificar();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
@@ -144,20 +144,20 @@ public class VectorTSensibilizadas {
     private void setVentanasTemporales(){
         Random rd = new Random();
 
-        for (Integer integer : INV_1) {
-            alfa[integer] =  rd.nextInt(REFERENCIA_INVARIANTE_1);
-            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA);
+        for (Integer integer : TRANS_TEMP_DE_INV_1) {
+            alfa[integer] =  rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_1);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_1 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_1 * ANCHO_DE_VENTANA);
         }
-        for (Integer integer : INV_2) {
-            alfa[integer] =  rd.nextInt(REFERENCIA_INVARIANTE_2);
-            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA);
+        for (Integer integer : TRANS_TEMP_DE_INV_2) {
+            alfa[integer] =   rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_2);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_2 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_2 * ANCHO_DE_VENTANA);
         }
-        for (Integer integer : INV_3) {
-            alfa[integer] = rd.nextInt(REFERENCIA_INVARIANTE_3);
-            beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA);
-        }//TODO: porque elinvariante 3 tenia desventaja?
+        for (Integer integer : TRANS_TEMP_DE_INV_3) {
+            alfa[integer] = rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_3);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_3 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_3 * ANCHO_DE_VENTANA);
+        }
     }
 }

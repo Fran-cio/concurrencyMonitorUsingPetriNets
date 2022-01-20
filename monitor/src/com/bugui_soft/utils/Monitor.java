@@ -18,7 +18,7 @@ public class Monitor {
                 monitor = new Monitor();
                 politica = Politicas.getInstanceOfPoliticas();
                 mutex = new Semaphore(1);
-                colasCondition = new Semaphore[CANTIDAD_TRANSICIONES]; //TODO: CANTIDAD  DE INVARIANTE
+                colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
                     colasCondition[i] = new Semaphore(0);
                     
@@ -39,34 +39,44 @@ public class Monitor {
      * @param tDisparable trans a disparar
      * @return TRUE si se puedo disparar o FALSE si no se puedo disparar.
      */
-    public boolean dispararTransicion(Integer tDisparable) {
+    public boolean cambiarEstadoDeRed(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
-        try {
-            mutex.acquire();
+        colaDeEntrada();
       
-            Boolean seDisparo = rdp.disparar(tDisparable);
-            exit();
+        Boolean seDisparo = rdp.disparar(tDisparable);
+        notificar();
 
-            if (!seDisparo){
-                colasCondition[tDisparable].acquire();
-                return false;
-            }
-            return true;
-
-        } catch (InterruptedException e) {
-            System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
+        if (!seDisparo){
+            enviarAColaDeCondicion(tDisparable);
             return false;
         }
-       
+        return true;
+
+
     }
 
+    private void enviarAColaDeCondicion(Integer tDisparable) {
+        try {
+            colasCondition[tDisparable].acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void colaDeEntrada(){
+        try{
+            mutex.acquire();
+        } catch (InterruptedException e) {
+            System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
+            System.exit(1);
+        }
+    }
     /**
      * Pregunta si hay alguien esperando el mutex (Probablemente haya salido de una ventana temporal) y si lo hay, se lo
      * cede
      * Si no hay nadie, notifica a alguien en las colas de condicion que pueda disparar (ademas ajusta la politica)
      * y este sale del monitor
      */
-    public void exit() { //TODO: hice un cambio vago (ponerlo publico), me disgusta pero queda a pulir 
+    public void notificar() {
         liberarUno();
         
         if(mutex.availablePermits()!=0){
