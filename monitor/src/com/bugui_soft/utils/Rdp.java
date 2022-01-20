@@ -89,6 +89,7 @@ public class Rdp {
             monitor.getPolitica().incrementarInvariante(disparo);
             return true;
         }
+        actualizarTSensibilizadas();
         return false;
     }
 

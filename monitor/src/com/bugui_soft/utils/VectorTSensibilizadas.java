@@ -108,14 +108,14 @@ public class VectorTSensibilizadas {
 
 
             //Antes de irse a dormir, libera otra transicion potencial
-            //Main.monitor.exit(); //! TODO: aca esta el crimen linea 111 y 118
+            Main.monitor.exit(); //! TODO: aca esta el crimen linea 111 y 118
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-           // Monitor.getMutex().acquire();
+            Monitor.getMutex().acquire();
 
             
             estaEsperando[disparo]=false;
@@ -145,12 +145,12 @@ public class VectorTSensibilizadas {
         Random rd = new Random();
 
         for (Integer integer : INV_1) {
-            alfa[integer] = REFERENCIA_INVARIANTE_1 + rd.nextInt(REFERENCIA_INVARIANTE_1);
+            alfa[integer] =  rd.nextInt(REFERENCIA_INVARIANTE_1);
             beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
                     rd.nextInt(REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA);
         }
         for (Integer integer : INV_2) {
-            alfa[integer] = REFERENCIA_INVARIANTE_2 + rd.nextInt(REFERENCIA_INVARIANTE_2);
+            alfa[integer] =  rd.nextInt(REFERENCIA_INVARIANTE_2);
             beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
                     rd.nextInt(REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA);
         }
@@ -158,6 +158,6 @@ public class VectorTSensibilizadas {
             alfa[integer] = rd.nextInt(REFERENCIA_INVARIANTE_3);
             beta[integer] = alfa[integer] + REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
                     rd.nextInt(REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA);
-        }
+        }//TODO: porque elinvariante 3 tenia desventaja?
     }
 }
