@@ -20,8 +20,8 @@ public class Productor extends Operario implements Runnable {
     }
 
     public void run() {
-        Thread.currentThread().setName("Productor");
-        ATrabajar(Constantes.SLEEP_PRODUCTOR_MS);
+        Thread.currentThread().setName(Constantes.PRODUCTOR);
+        aTrabajar(Constantes.SLEEP_PRODUCTOR_MS);
     }
 
 }

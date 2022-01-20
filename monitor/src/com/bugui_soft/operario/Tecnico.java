@@ -21,8 +21,8 @@ public class Tecnico extends Operario implements Runnable {
     }
 
     public void run() {
-        Thread.currentThread().setName("Tecnico");
-        ATrabajar(Constantes.SLEEP_TECNICO_MS);
+        Thread.currentThread().setName(Constantes.TECNICO);
+        aTrabajar(Constantes.SLEEP_TECNICO_MS);
     }
 
 }

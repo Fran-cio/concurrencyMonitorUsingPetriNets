@@ -72,7 +72,7 @@ public class Rdp {
 
     /**
      * Dispara la red de petri, cambiando su marcado y transiciones sensibilizadas
-     * , devuelve un Boolean dependiendo de si se pudo disparar o no.
+     * @return False: no disparo, True: disparó
      */
 
     public Boolean disparar(Integer disparo) {

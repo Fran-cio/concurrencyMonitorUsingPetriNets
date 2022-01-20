@@ -8,16 +8,21 @@ public class Interfaz extends JFrame implements Runnable{
     private static final Object lock = new Object();
     private static Interfaz interfaz;
 
-    private JPanel ventana;
-    private JProgressBar barraInvariante1;
-    private JProgressBar barraInvariante2;
-    private JProgressBar barraInvariante3;
-    private JLabel Marcado;
-    private JPanel panelMarcado;
-    private JPanel panelTitulo;
-    private JPanel panelInvariantes;
-    private JPanel panelBarras;
-    private JLabel Titulo;
+    
+    //TODO: ELIMINAR LOS NEW PARA LOS QUE USEN NETBEANS
+    private JPanel ventana = new JPanel();
+    private JProgressBar barraInvariante1 = new JProgressBar();
+    private JProgressBar barraInvariante2 = new JProgressBar();
+    private JProgressBar barraInvariante3 = new JProgressBar();
+    private JLabel Marcado = new JLabel();
+    private JPanel panelMarcado = new JPanel();
+    private JPanel panelTitulo = new JPanel();
+    private JPanel panelInvariantes = new JPanel();
+    private JPanel panelBarras = new JPanel();
+    private JLabel Titulo = new JLabel();
+    
+    
+    
 
     private Interfaz() { }
 
@@ -25,6 +30,23 @@ public class Interfaz extends JFrame implements Runnable{
         synchronized (lock) {
             if (interfaz == null) {
                 interfaz = new Interfaz();
+
+                
+                //TODO: COMENTAR ESTO PARA LOS QUE USEN netBeans 
+                interfaz.panelMarcado.add(interfaz.Marcado);
+
+                interfaz.panelBarras.add(interfaz.barraInvariante1);
+                interfaz.panelBarras.add(interfaz.barraInvariante2);
+                interfaz.panelBarras.add(interfaz.barraInvariante3);
+
+
+                interfaz.ventana.add(interfaz.panelMarcado);
+                interfaz.ventana.add(interfaz.panelTitulo);
+                interfaz.ventana.add(interfaz.panelInvariantes);
+                interfaz.ventana.add(interfaz.panelBarras);
+                
+                //---------------------------
+
                 interfaz.setLayout(null);
                 interfaz.setTitle("Buguisoft - TpFinal - Prog. Concurrente");
                 interfaz.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

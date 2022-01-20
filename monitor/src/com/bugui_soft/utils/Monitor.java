@@ -1,5 +1,4 @@
 package com.bugui_soft.utils;
-
 import java.util.concurrent.*;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 
@@ -19,10 +18,10 @@ public class Monitor {
                 monitor = new Monitor();
                 politica = Politicas.getInstanceOfPoliticas();
                 mutex = new Semaphore(1);
-                colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
+                colasCondition = new Semaphore[CANTIDAD_TRANSICIONES]; //TODO: CANTIDAD  DE INVARIANTE
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
                     colasCondition[i] = new Semaphore(0);
-                colasCondition[0].release();
+                    
             } else {
                 System.out.println("Ya existe una instancia de monitor, no se creará otra");
             }
@@ -38,19 +37,27 @@ public class Monitor {
      * a disparar, se va lo va a liberar.
      *
      * @param tDisparable trans a disparar
+     * @return TRUE si se puedo disparar o FALSE si no se puedo disparar.
      */
     public boolean dispararTransicion(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         try {
-            colasCondition[tDisparable].acquire();
             mutex.acquire();
+      
+            Boolean seDisparo = rdp.disparar(tDisparable);
+            exit();
+
+            if (!seDisparo){
+                colasCondition[tDisparable].acquire();
+                return false;
+            }
+            return true;
+
         } catch (InterruptedException e) {
             System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
+            return false;
         }
-        Boolean seDisparo = rdp.disparar(tDisparable);
-
-        exit();
-        return seDisparo;
+       
     }
 
     /**
@@ -59,14 +66,12 @@ public class Monitor {
      * Si no hay nadie, notifica a alguien en las colas de condicion que pueda disparar (ademas ajusta la politica)
      * y este sale del monitor
      */
-    private void exit() {
-        if (!mutex.hasQueuedThreads()) {
-            liberarUno();
-        }
-
+    public void exit() { //TODO: hice un cambio vago (ponerlo publico), me disgusta pero queda a pulir 
+        liberarUno();
+        
         if(mutex.availablePermits()!=0){
-            System.out.println("El mutex ha dejado de ser binario");
-            System.exit(1); //Se puede sacar: Si el semaforo deja de ser binario muere aca
+            System.out.println("Error en el mutex: la entrada al monitor ha dejado de ser binaria: ");
+            System.exit(1); //Si el semaforo deja de ser binario muere aca
         }
         mutex.release();
     }
@@ -90,13 +95,15 @@ public class Monitor {
     }
 
     /**
-     * Se obtienen las transiciones con hilos esperando, sensibilizadas y que no esten esperando ventana, de estas
+     * Se obtienen las transiciones con hilos esperando en colas con transiciones sensibilizadas y
+     *  que no esten esperando la ventana de estas
      * la politica decide cual notificar para mantener la carga de los invariantes.
      */
     public void liberarUno(){
         Integer[] transicionesEjecutables = getTransPotencialColas();
         Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
         colasCondition[cualDisparar].release();
+    
     }
 
     public Politicas getPolitica() {

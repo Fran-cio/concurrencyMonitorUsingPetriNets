@@ -105,17 +105,19 @@ public class VectorTSensibilizadas {
                System.out.println("El mutex ha dejado de ser binario");
                System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
             }
-            //Antes de irse a dormir, libera otra transicion potencial
-            Main.monitor.liberarUno();
 
-            Monitor.getMutex().release();
+
+            //Antes de irse a dormir, libera otra transicion potencial
+            //Main.monitor.exit(); //! TODO: aca esta el crimen linea 111 y 118
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Monitor.getMutex().acquire();
+           // Monitor.getMutex().acquire();
+
+            
             estaEsperando[disparo]=false;
         } else {
             throw new TimeoutException();

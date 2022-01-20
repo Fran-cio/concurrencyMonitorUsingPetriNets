@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.concurrent.Exchanger;
 import com.bugui_soft.utils.*;
 import static com.bugui_soft.utils.Constantes.*;
-// TODO: Preguntar a juan si le parecen bien como estan puestos los invariantes en elos operarios (Creo que fue el que lo hizo)
+
 public class Main {
     //crear el monitor
     private static final OperarioFactory operarioFactory = OperarioFactory.getInstanceOfOperarioFactory();
     private static final HilosFactory hilosFactory = HilosFactory.getInstanceOfThreadFactory();
-    private static final ArrayList<Runnable> operarios = new ArrayList<>(Constantes.CANTIDAD_OPERARIOS);
+    private static final ArrayList<Runnable> operarios = new ArrayList<>();
 
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
 

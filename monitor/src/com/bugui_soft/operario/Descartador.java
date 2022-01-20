@@ -21,7 +21,7 @@ public class Descartador extends Operario implements Runnable {
     }
 
     public void run() {
-        Thread.currentThread().setName("Descartador");
-        ATrabajar(Constantes.SLEEP_DESCARTADOR_MS);
+        Thread.currentThread().setName(Constantes.DESCARTADOR);
+        aTrabajar(Constantes.SLEEP_DESCARTADOR_MS);
     }
 }

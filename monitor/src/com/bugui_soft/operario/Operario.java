@@ -17,13 +17,13 @@ public abstract class Operario {
  * A fines practicos todos los hacen su tarea e intenan cambiar el estado de la red, cada uno avanza haciendo la tarea
  * tenga asignada (Es decir, el vector tInvariante tiene enumeradas en orden las transiciones a ejecutar
  */
-    protected void ATrabajar(Integer tiempoDeTrabajo){
+    protected void aTrabajar(Integer tiempoDeTrabajo){
         while (!finDePrograma) {
             for (Integer transicion : tInvariante) {
                 while (!monitor.dispararTransicion(transicion)) {
 
                 }
-                if (finDePrograma) break;
+                //if (finDePrograma) break;
                 try {
                     TimeUnit.MILLISECONDS.sleep(tiempoDeTrabajo);
                 } catch (InterruptedException e) {

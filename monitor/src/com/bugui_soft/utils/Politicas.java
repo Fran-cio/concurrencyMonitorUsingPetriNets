@@ -80,10 +80,10 @@ public class Politicas {
         return posMin;
     }
 
-    public void incrementarInvariante(Integer transicion) {
+    public void incrementarInvariante(Integer transicion) { //TODO: interesante tu cambio fran, de esta forma nos aseguramos que se cuenten los cilos de las tareas de los 3 invariantes.
         try {
         if (transicion == 5) {//es el conflicto
-            cuentaDeInvariantes[1]++;
+           cuentaDeInvariantes[1]++;
         } else if(transicion ==10) {
             cuentaDeInvariantes[0]++;
         }

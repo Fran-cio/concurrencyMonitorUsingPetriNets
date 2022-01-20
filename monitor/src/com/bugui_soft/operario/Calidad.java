@@ -20,8 +20,8 @@ public class Calidad extends Operario implements Runnable {
     }
 
     public void run() {
-        Thread.currentThread().setName("Calidad");
-        ATrabajar(Constantes.SLEEP_CALIDAD_MS);
+        Thread.currentThread().setName(Constantes.CALIDAD);
+        aTrabajar(Constantes.SLEEP_CALIDAD_MS);
     }
 
 }
