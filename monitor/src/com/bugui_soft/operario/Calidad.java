@@ -13,7 +13,6 @@ import com.bugui_soft.utils.Constantes;
 public class Calidad extends Operario implements Runnable {
 
     public Calidad() {
-        super();
         //Invariante de transiciones del Descartador.(T1)
         Integer[] tInvariante = new Integer[]{0};
         setTInvariante(tInvariante);

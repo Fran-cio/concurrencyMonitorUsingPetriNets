@@ -1,5 +1,9 @@
 package com.bugui_soft.utils;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.*;
+
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 
 public class Monitor {
@@ -10,7 +14,8 @@ public class Monitor {
     private static Semaphore mutex; // "cola" de entrada al monitor
     private static Semaphore[] colasCondition; // Array con las colas de condiciones
 
-    private Monitor() {}
+    private Monitor() {
+    }
 
     public static Monitor getInstanceOfMonitor() {
         synchronized (lock) {
@@ -21,7 +26,7 @@ public class Monitor {
                 colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
                     colasCondition[i] = new Semaphore(0);
-                    
+
             } else {
                 System.out.println("Ya existe una instancia de monitor, no se creará otra");
             }
@@ -42,34 +47,34 @@ public class Monitor {
     public boolean cambiarEstadoDeRed(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         colaDeEntrada();
-      
+
         Boolean seDisparo = rdp.disparar(tDisparable);
         notificar();
 
-        if (!seDisparo){
+        if (!seDisparo) {
             enviarAColaDeCondicion(tDisparable);
             return false;
         }
         return true;
-
-
     }
 
-    private void enviarAColaDeCondicion(Integer tDisparable) {
+    private void enviarAColaDeCondicion(@NotNull Integer tDisparable) {
         try {
             colasCondition[tDisparable].acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-    private void colaDeEntrada(){
-        try{
+
+    private void colaDeEntrada() {
+        try {
             mutex.acquire();
         } catch (InterruptedException e) {
             System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
             System.exit(1);
         }
     }
+
     /**
      * Pregunta si hay alguien esperando el mutex (Probablemente haya salido de una ventana temporal) y si lo hay, se lo
      * cede
@@ -78,8 +83,8 @@ public class Monitor {
      */
     public void notificar() {
         liberarUno();
-        
-        if(mutex.availablePermits()!=0){
+
+        if (mutex.availablePermits() != 0) {
             System.out.println("Error en el mutex: la entrada al monitor ha dejado de ser binaria: ");
             System.exit(1); //Si el semaforo deja de ser binario muere aca
         }
@@ -91,12 +96,12 @@ public class Monitor {
      * que tienen transiciones sensibilizadas
      */
 
-    private Integer[] getTransPotencialColas() {
+    private Integer @NotNull [] getTransPotencialColas() {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay hilos esperando y transiciones sensibilizadas
             if ((colasCondition[i].getQueueLength() != 0) && (rdp.getSensibilizadas()[i] == 1) &&
-            !VectorTSensibilizadas.estaEsperando[i])
+                    !VectorTSensibilizadas.estaEsperando[i])
                 aux[i] = 1;
             else
                 aux[i] = 0;
@@ -106,14 +111,13 @@ public class Monitor {
 
     /**
      * Se obtienen las transiciones con hilos esperando en colas con transiciones sensibilizadas y
-     *  que no esten esperando la ventana de estas
+     * que no esten esperando la ventana de estas
      * la politica decide cual notificar para mantener la carga de los invariantes.
      */
-    public void liberarUno(){
+    public void liberarUno() {
         Integer[] transicionesEjecutables = getTransPotencialColas();
         Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
         colasCondition[cualDisparar].release();
-    
     }
 
     public Politicas getPolitica() {

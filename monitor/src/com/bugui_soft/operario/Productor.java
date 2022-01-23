@@ -14,7 +14,6 @@ public class Productor extends Operario implements Runnable {
 
     public Productor() {
         //Invariante de transiciones del Productor.(T2 a T5)
-        super();
         Integer[] tInvariante = new Integer[]{2, 3, 4, 5};
         setTInvariante(tInvariante);
     }

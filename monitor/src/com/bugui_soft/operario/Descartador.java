@@ -14,7 +14,6 @@ import com.bugui_soft.utils.Constantes;
 public class Descartador extends Operario implements Runnable {
 
     public Descartador() {
-        super();
         //Invariante de transiciones del Descartador.(T1 y T10)
         Integer[] tInvariante = new Integer[]{1, 10};
         setTInvariante(tInvariante);

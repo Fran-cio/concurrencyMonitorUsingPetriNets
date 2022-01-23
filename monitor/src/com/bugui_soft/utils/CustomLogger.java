@@ -41,7 +41,7 @@ public class CustomLogger implements Runnable {
     public void run() {
         /*Va a correr hasta que se ejecuten 1000 transiciones*/
         try {
-            while (!Rdp.milInvariantes) {
+            while (!Rdp.esInvarianteMil) {
                     /*
                      * Para loggear la transicion que se disparo se utilizo una primitiva llamada exchanger vista en clase
                      * que intercambia mensajes entre los hilos que se disparan y se quede esperando los mensajes

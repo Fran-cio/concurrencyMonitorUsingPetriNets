@@ -10,7 +10,9 @@ package com.bugui_soft;
 
 import java.util.ArrayList;
 import java.util.concurrent.Exchanger;
+
 import com.bugui_soft.utils.*;
+
 import static com.bugui_soft.utils.Constantes.*;
 
 public class Main {
@@ -26,7 +28,7 @@ public class Main {
 
     public static final Exchanger<Integer> exchangerLogger = new Exchanger<>();
     public static final Exchanger<Integer[]> exchangerGUI = new Exchanger<>();
-    public static boolean finDePrograma= false;
+    public static boolean finDePrograma = false;
 
     public static void main(String[] args) {
         cargarOperarios();
@@ -47,7 +49,7 @@ public class Main {
     }
 
     /**
-     *  Esta funcion utiliza la clase factory y acumula los objetos en un arreglo
+     * Esta funcion utiliza la clase factory y acumula los objetos en un arreglo
      */
     private static void cargarOperarios() {
         for (int i = 0; i < CANTIDAD_PRODUCTORES; i++) {
@@ -64,7 +66,7 @@ public class Main {
      * Cuando log termina de escribir se ejecuta esta funcion que termina la ejecucion.
      */
     public static void finalizarPrograma() {
-        finDePrograma=true;
+        finDePrograma = true;
         System.out.println("Se acabó el programa");
     }
 }
