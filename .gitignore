@@ -24,9 +24,7 @@
 *.class
 
 # IntelliJ Files
-.idea
 out
-*.iml
 
 # Archivos del proyecto
 redes_de_petri
