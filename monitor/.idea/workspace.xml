@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a04db715-ecf0-4251-a2fa-cefdc90e694e" name="Changes" comment="doc: Cambie nombres de funciones y resolvi algunos TODO" />
+    <list default="true" id="a04db715-ecf0-4251-a2fa-cefdc90e694e" name="Changes" comment="doc: Cambie nombres de funciones y resolvi algunos TODO">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,6 +48,7 @@
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="20ngaNea5PymmuxAod2BAb1UK0l" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -61,7 +64,7 @@
     <property name="UI_DESIGNER_EDITOR_MODE.PaletteManager.SHOW" value="true" />
     <property name="UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.WIDTH" value="317" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Escritorio/BuguiSoft/monitor" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -132,6 +135,9 @@
       <workItem from="1643642046614" duration="43000" />
       <workItem from="1643642623242" duration="155000" />
       <workItem from="1643642863885" duration="614000" />
+      <workItem from="1643645175694" duration="382000" />
+      <workItem from="1643645622740" duration="24000" />
+      <workItem from="1643645712099" duration="50000" />
     </task>
     <task id="LOCAL-00001" summary="Funcionando">
       <created>1639086029030</created>
