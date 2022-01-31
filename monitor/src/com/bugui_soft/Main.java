@@ -10,14 +10,16 @@ package com.bugui_soft;
 
 import java.util.ArrayList;
 import java.util.concurrent.Exchanger;
+
 import com.bugui_soft.utils.*;
+
 import static com.bugui_soft.utils.Constantes.*;
-// TODO: Preguntar a juan si le parecen bien como estan puestos los invariantes en elos operarios (Creo que fue el que lo hizo)
+
 public class Main {
     //crear el monitor
     private static final OperarioFactory operarioFactory = OperarioFactory.getInstanceOfOperarioFactory();
     private static final HilosFactory hilosFactory = HilosFactory.getInstanceOfThreadFactory();
-    private static final ArrayList<Runnable> operarios = new ArrayList<>(Constantes.CANTIDAD_OPERARIOS);
+    private static final ArrayList<Runnable> operarios = new ArrayList<>();
 
     public static final Monitor monitor = Monitor.getInstanceOfMonitor();
 
@@ -26,7 +28,7 @@ public class Main {
 
     public static final Exchanger<Integer> exchangerLogger = new Exchanger<>();
     public static final Exchanger<Integer[]> exchangerGUI = new Exchanger<>();
-    public static boolean finDePrograma= false;
+    public static boolean finDePrograma = false;
 
     public static void main(String[] args) {
         cargarOperarios();
@@ -47,7 +49,7 @@ public class Main {
     }
 
     /**
-     *  Esta funcion utiliza la clase factory y acumula los objetos en un arreglo
+     * Esta funcion utiliza la clase factory y acumula los objetos en un arreglo
      */
     private static void cargarOperarios() {
         for (int i = 0; i < CANTIDAD_PRODUCTORES; i++) {
@@ -64,7 +66,7 @@ public class Main {
      * Cuando log termina de escribir se ejecuta esta funcion que termina la ejecucion.
      */
     public static void finalizarPrograma() {
-        finDePrograma=true;
+        finDePrograma = true;
         System.out.println("Se acabó el programa");
     }
 }

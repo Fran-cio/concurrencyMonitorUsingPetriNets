@@ -1,5 +1,8 @@
 package com.bugui_soft.utils;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 import static com.bugui_soft.utils.Constantes.CANTIDAD_PLAZAS;
 
@@ -8,7 +11,8 @@ public class Utilidades {
     private Utilidades() {}
 
     //Calcula el producto punto pero solo para los valores de plazas y transiciones definidos
-    public static Integer[] productoMatricial(Integer[][] matriz, Integer[] vector) {
+    @Contract(pure = true)
+    public static Integer @NotNull [] productoMatricial(Integer[][] matriz, Integer[] vector) {
         Integer[] productoMatricial = new Integer[CANTIDAD_PLAZAS];
         //plazas filas de la matriz, transiciones columnas
         for (int i = 0; i < CANTIDAD_PLAZAS; i++) {
@@ -24,7 +28,8 @@ public class Utilidades {
     /**
      * Es la suma vectorial estandar
      */
-    public static Integer[] sumarVectores(Integer[] vector1, Integer[] vector2) {
+    @Contract(pure = true)
+    public static Integer @NotNull [] sumarVectores(Integer[] vector1, Integer[] vector2) {
         Integer[] resultante = new Integer[CANTIDAD_PLAZAS];
         for (int i = 0; i < CANTIDAD_PLAZAS; i++) {
             resultante[i] = vector1[i] + vector2[i];

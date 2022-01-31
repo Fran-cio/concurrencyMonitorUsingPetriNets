@@ -18,14 +18,19 @@
 *.zip
 *.tar.gz
 *.rar
-*.xml
 
 # Output files
 *.out
 *.class
 
+# IntelliJ Files
+out
+
+# Archivos del proyecto
+redes_de_petri
 monitor/data/Log.txt
-./monitor/out/*
+MARCADOS.xlsx
+
 # Drive Files
 *.ini
 

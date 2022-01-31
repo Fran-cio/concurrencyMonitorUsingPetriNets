@@ -1,7 +1,9 @@
 package com.bugui_soft.utils;
 
-import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.*;
+
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
 
 public class Monitor {
@@ -12,7 +14,8 @@ public class Monitor {
     private static Semaphore mutex; // "cola" de entrada al monitor
     private static Semaphore[] colasCondition; // Array con las colas de condiciones
 
-    private Monitor() {}
+    private Monitor() {
+    }
 
     public static Monitor getInstanceOfMonitor() {
         synchronized (lock) {
@@ -23,6 +26,7 @@ public class Monitor {
                 colasCondition = new Semaphore[CANTIDAD_TRANSICIONES];
                 for (int i = 0; i < CANTIDAD_TRANSICIONES; i++)
                     colasCondition[i] = new Semaphore(0);
+
             } else {
                 System.out.println("Ya existe una instancia de monitor, no se creará otra");
             }
@@ -37,51 +41,54 @@ public class Monitor {
      * el mutex. Si estaba fuera de la ventana, se va a la cola de condicion de esa transcicion, y cuando se pueda volver
      * a disparar, se va lo va a liberar.
      *
-     * @param tInvariantes transiciones que pueden hacer esos hilos en particular
+     * @param tDisparable trans a disparar
+     * @return TRUE si se puedo disparar o FALSE si no se puedo disparar.
      */
-    public void dispararTransicion(Integer[] tInvariantes) {
+    public boolean cambiarEstadoDeRed(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
-        try {
-            mutex.acquire();//entrada al monitor
-            Integer[] transPot = getTransPotencialDelOperario(tInvariantes);
-            //Si este Operario tiene transiciones potenciales (Sensibilizadas por el marcado)
-            if (Arrays.stream(transPot).anyMatch(n -> n != 0)) {
-                Integer tDisparable = politica.cualDisparar(transPot);
-                Boolean seDisparo = rdp.disparar(tDisparable);
+        colaDeEntrada();
 
-                if (!seDisparo) {
-                    try {
-                        rdp.actualizarTSensibilizadas();
-                        exit();
-                        colasCondition[tDisparable].acquire();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        Boolean seDisparo = rdp.disparar(tDisparable);
+        notificar();
+
+        if (!seDisparo) {
+            enviarAColaDeCondicion(tDisparable);
+            return false;
+        }
+        return true;
+    }
+
+    private void enviarAColaDeCondicion(@NotNull Integer tDisparable) {
+        try {
+            colasCondition[tDisparable].acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void colaDeEntrada() {
+        try {
+            mutex.acquire();
         } catch (InterruptedException e) {
             System.out.println("El hilo " + Thread.currentThread().getName() + " se interrumpió en el monitor");
+            System.exit(1);
         }
-        exit();
     }
 
     /**
-     * Pregunta si hay alguien en una cola de condición, en ese caso le da el mutex a él, y sino lo libera. La politica
-     * de señalizado elegida es Signal And Exit
+     * Pregunta si hay alguien esperando el mutex (Probablemente haya salido de una ventana temporal) y si lo hay, se lo
+     * cede
+     * Si no hay nadie, notifica a alguien en las colas de condicion que pueda disparar (ademas ajusta la politica)
+     * y este sale del monitor
      */
-    private void exit() {
-        Integer[] transicionesEjecutables = getTransPotencialColas();
-        boolean hayHilosEsperando = Arrays.stream(transicionesEjecutables).anyMatch(n -> n > 0);
-        if (hayHilosEsperando) {
-            Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
-            colasCondition[cualDisparar].release();
-        } else {
-            if(mutex.availablePermits()!=0){
-                System.out.println("El mutex ha dejado de ser binario");
-                System.exit(1); //Se puede sacar: Si el semaforo deja de ser binario muere aca
-            }
-            mutex.release();
+    public void notificar() {
+        liberarUno();
+
+        if (mutex.availablePermits() != 0) {
+            System.out.println("Error en el mutex: la entrada al monitor ha dejado de ser binaria: ");
+            System.exit(1); //Si el semaforo deja de ser binario muere aca
         }
+        mutex.release();
     }
 
     /**
@@ -89,11 +96,12 @@ public class Monitor {
      * que tienen transiciones sensibilizadas
      */
 
-    private Integer[] getTransPotencialColas() {
+    private Integer @NotNull [] getTransPotencialColas() {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay hilos esperando y transiciones sensibilizadas
-            if ((colasCondition[i].getQueueLength() != 0) && (rdp.getSensibilizadas()[i] == 1))
+            if ((colasCondition[i].getQueueLength() != 0) && (rdp.getSensibilizadas()[i] == 1) &&
+                    !VectorTSensibilizadas.estaEsperando[i])
                 aux[i] = 1;
             else
                 aux[i] = 0;
@@ -102,18 +110,14 @@ public class Monitor {
     }
 
     /**
-     * Devuelve un Array de las transiciones sensibilizadas del invariante de transiciones del hilo operario
+     * Se obtienen las transiciones con hilos esperando en colas con transiciones sensibilizadas y
+     * que no esten esperando la ventana de estas
+     * la politica decide cual notificar para mantener la carga de los invariantes.
      */
-    private Integer[] getTransPotencialDelOperario(Integer[] tInvariantes) {
-
-        Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
-        for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
-            /* llama a un wrapper para obtenner la transiciones sensibilizadas, y hace la multiplicación para saber si
-            * se corresponde con una transición del hilo, si esto es así va a ser una transición sensibilizada,
-            * sino no*/
-            aux[i] = rdp.getSensibilizadas()[i] * tInvariantes[i];
-        }
-        return aux;
+    public void liberarUno() {
+        Integer[] transicionesEjecutables = getTransPotencialColas();
+        Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
+        colasCondition[cualDisparar].release();
     }
 
     public Politicas getPolitica() {

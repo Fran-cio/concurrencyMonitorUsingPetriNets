@@ -8,7 +8,11 @@
 
 package com.bugui_soft.utils;
 
+import com.bugui_soft.Main;
+import org.jetbrains.annotations.NotNull;
+
 import static com.bugui_soft.utils.Constantes.*;
+
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
@@ -18,25 +22,26 @@ public class VectorTSensibilizadas {
     private static Integer[] alfa;
     private static Integer[] beta;
     private static Integer[] sensibilizada;
-    private static Boolean[] estaEsperando;
+    public static Boolean[] estaEsperando;
 
     private VectorTSensibilizadas() {
     }
-/**
- * Los criterios para que tiempos asignar a cada invariante son con el unico fin de un funcionamiento correcto, notamos
- * que hay problemas en la temporizacion cuando el tiempo del invariante 3 es demasiado grande, por lo tanto se temporizo
- * dentro de un umbral alfa donde no nos cause problemas al momento de ejecutar el programa. Los Beta son para que haya
- * un conjunto de pasos de ventana para que se vea que se pueden dar porque que no afecten la el avance de la red.
- *
- * Todos los tiempos estan dados en mili segundos.
- */
+
+    /**
+     * Los criterios para que tiempos asignar a cada invariante son con el unico fin de un funcionamiento correcto, notamos
+     * que hay problemas en la temporizacion cuando el tiempo del invariante 3 es demasiado grande, por lo tanto se temporizo
+     * dentro de un umbral alfa donde no nos cause problemas al momento de ejecutar el programa. Los Beta son para que haya
+     * un conjunto de pasos de ventana para que se vea que se pueden dar porque que no afecten la el avance de la red.
+     * <p>
+     * Todos los tiempos estan dados en mili segundos.
+     */
     public static VectorTSensibilizadas getInstanceOfVectorTSensibilizadas(Integer[] transiciones) {
         synchronized (lock) {
             if (vectorTSensibilizadas == null) {
                 vectorTSensibilizadas = new VectorTSensibilizadas();
                 alfa = new Integer[CANTIDAD_TRANSICIONES];
                 beta = new Integer[CANTIDAD_TRANSICIONES];
-                estaEsperando= new Boolean[CANTIDAD_TRANSICIONES];
+                estaEsperando = new Boolean[CANTIDAD_TRANSICIONES];
 
                 vectorTSensibilizadas.setVentanasTemporalesBase();
                 vectorTSensibilizadas.setVentanasTemporales();
@@ -63,7 +68,7 @@ public class VectorTSensibilizadas {
      * @param disparo: Numero transicion a dispararse
      * @return Si se pudo disparar o no
      **/
-    public boolean estaSensibilizado(Integer disparo) {
+    public boolean estaSensibilizado(@NotNull Integer disparo) {
         if (sensibilizada[disparo] > 0 && !estaEsperando[disparo]) {
             /*
              * Si esta sensibilizado por tokens y no hay ningun hilo ya esperando por esa transicion, entra a este if
@@ -77,8 +82,8 @@ public class VectorTSensibilizadas {
 
             if (estamosEnVentana) return true;
             try {
-                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual,disparo);
-                if(sensibilizada[disparo]==1) {
+                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual, disparo);
+                if (sensibilizada[disparo] == 1) {
                     return true;
                 }
             } catch (TimeoutException e) {
@@ -91,20 +96,21 @@ public class VectorTSensibilizadas {
         return false;
     }
 
-/**
- * Espera el tiempo necesario para disparar en caso de superar la ventana.
- *
- * @exception TimeoutException porque superó el tiempo máximo de la ventana.
- **/
-    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual,Integer disparo) throws TimeoutException, InterruptedException {
+    /**
+     * Espera el tiempo necesario para disparar en caso de superar la ventana.
+     *
+     * @throws TimeoutException porque superó el tiempo máximo de la ventana.
+     **/
+    private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual, Integer disparo) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
-            estaEsperando[disparo]=true;
-            if(Monitor.getMutex().availablePermits()!=0) {
-               System.out.println("El mutex ha dejado de ser binario");
-               System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
+            estaEsperando[disparo] = true;
+            if (Monitor.getMutex().availablePermits() != 0) {
+                System.out.println("El mutex ha dejado de ser binario");
+                System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
             }
 
-            Monitor.getMutex().release();
+            //Antes de irse a dormir, libera otra transicion potencial
+            Main.monitor.notificar();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
             try {
                 Thread.sleep(tiempoDormir);
@@ -112,7 +118,8 @@ public class VectorTSensibilizadas {
                 e.printStackTrace();
             }
             Monitor.getMutex().acquire();
-            estaEsperando[disparo]=false;
+
+            estaEsperando[disparo] = false;
         } else {
             throw new TimeoutException();
         }
@@ -122,7 +129,7 @@ public class VectorTSensibilizadas {
      * Se asignan valores base para las temporizaciones, los cuales funcionan como si no hubiera semantica temporal
      * corriendo
      */
-    private void setVentanasTemporalesBase(){
+    private void setVentanasTemporalesBase() {
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             alfa[i] = 0;
             beta[i] = Integer.MAX_VALUE;
@@ -135,26 +142,23 @@ public class VectorTSensibilizadas {
      * base a valores que se consideran que se comportan correctamente, siendo este, que la carga de invariantes no se
      * afecte y que ademas no se exageren la cantidad de ventanas superadas.
      */
-    private void setVentanasTemporales(){
+    private void setVentanasTemporales() {
         Random rd = new Random();
 
-        for (int i = 0; i < INV_1.length; i++) {
-            alfa[INV_1[i]] = REFERENCIA_INVARIANTE_1 + rd.nextInt(REFERENCIA_INVARIANTE_1);
-            beta[INV_1[i]] = alfa[INV_1[i]]+ REFERENCIA_INVARIANTE_1 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_1*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : TRANS_TEMP_DE_INV_1) {
+            alfa[integer] = rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_1);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_1 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_1 * ANCHO_DE_VENTANA);
         }
-        for (int i = 0; i < INV_2.length; i++) {
-            alfa[INV_2[i]] = REFERENCIA_INVARIANTE_2 + rd.nextInt(REFERENCIA_INVARIANTE_2);
-            beta[INV_2[i]] = alfa[INV_2[i]]+ REFERENCIA_INVARIANTE_2 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_2*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : TRANS_TEMP_DE_INV_2) {
+            alfa[integer] = rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_2);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_2 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_2 * ANCHO_DE_VENTANA);
         }
-        for (int i = 0; i < INV_3.length; i++) {
-            alfa[INV_3[i]] = rd.nextInt(REFERENCIA_INVARIANTE_3);
-            beta[INV_3[i]] = alfa[INV_3[i]]+ REFERENCIA_INVARIANTE_3 * ANCHO_DE_VENTANA +
-                    rd.nextInt(REFERENCIA_INVARIANTE_3*ANCHO_DE_VENTANA);
-            estaEsperando[i] = false;
+        for (Integer integer : TRANS_TEMP_DE_INV_3) {
+            alfa[integer] = rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_3);
+            beta[integer] = alfa[integer] + TIEMPO_MAXIMO_INVARIANTE_3 * ANCHO_DE_VENTANA +
+                    rd.nextInt(TIEMPO_MAXIMO_INVARIANTE_3 * ANCHO_DE_VENTANA);
         }
     }
 }

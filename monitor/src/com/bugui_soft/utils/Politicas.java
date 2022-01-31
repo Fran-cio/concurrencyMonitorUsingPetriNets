@@ -8,6 +8,8 @@
 
 package com.bugui_soft.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 import static com.bugui_soft.Main.exchangerGUI;
@@ -54,6 +56,7 @@ public class Politicas {
             return politicas;
         }
     }
+
     /**
      * Devuelve la transición menos disparada
      */
@@ -61,7 +64,7 @@ public class Politicas {
         return obtenerMenor(transPot);
     }
 
-    private Integer obtenerMenor(Integer[] transPot) {
+    private Integer obtenerMenor(Integer @NotNull [] transPot) {
         Integer minimo = Integer.MAX_VALUE;
         int posMin = 0;
         //se le otorga prioridad al conflicto ya que pone a su invariante en desventaja
@@ -82,21 +85,20 @@ public class Politicas {
 
     public void incrementarInvariante(Integer transicion) {
         try {
-        if (transicion == 5) {//es el conflicto
-            cuentaDeInvariantes[1]++;
-        } else if(transicion ==10) {
-            cuentaDeInvariantes[0]++;
-        }
-        else if(transicion==9) {
-            cuentaDeInvariantes[2]++;
-        }
-        exchangerGUI.exchange(cuentaDeInvariantes);
+            if (transicion == 5) {//es el conflicto
+                cuentaDeInvariantes[1]++;
+            } else if (transicion == 10) {
+                cuentaDeInvariantes[0]++;
+            } else if (transicion == 9) {
+                cuentaDeInvariantes[2]++;
+            }
+            exchangerGUI.exchange(cuentaDeInvariantes);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean milInveriantes(){
+    public boolean esInvarianteMil() {
         return cuentaDeInvariantes[0] + cuentaDeInvariantes[1] + cuentaDeInvariantes[2] > NUMERO_DE_TRANS_A_EJECUTAR;
     }
 }

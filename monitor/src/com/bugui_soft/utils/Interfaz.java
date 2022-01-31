@@ -1,10 +1,12 @@
 package com.bugui_soft.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 
 import static com.bugui_soft.Main.*;
 
-public class Interfaz extends JFrame implements Runnable{
+public class Interfaz extends JFrame implements Runnable {
     private static final Object lock = new Object();
     private static Interfaz interfaz;
 
@@ -13,13 +15,15 @@ public class Interfaz extends JFrame implements Runnable{
     private JProgressBar barraInvariante2;
     private JProgressBar barraInvariante3;
     private JLabel Marcado;
+    //FixMe: Si se usan las 5 variables de abajo!! NO CREER en el IDE.
     private JPanel panelMarcado;
     private JPanel panelTitulo;
     private JPanel panelInvariantes;
     private JPanel panelBarras;
     private JLabel Titulo;
 
-    private Interfaz() { }
+    private Interfaz() {
+    }
 
     public static Interfaz getInstanceOfInterfaz() {
         synchronized (lock) {
@@ -44,7 +48,7 @@ public class Interfaz extends JFrame implements Runnable{
     @Override
     public void run() {
         /*Va a correr hasta que se ejecuten 1000 transiciones*/
-        while (!Rdp.milInvariantes) {
+        while (!Rdp.esInvarianteMil) {
             try {
                 Integer[] invariantes = exchangerGUI.exchange(null);
                 updateBarra(invariantes); //Actualiza el Fronted
@@ -57,14 +61,13 @@ public class Interfaz extends JFrame implements Runnable{
         Marcado.setText("Marcado Final: " + marcado);
     }
 
-    private void updateBarra(Integer[] invariantes){
-        int porcentajeInvariante1 = (invariantes[0]*100)/Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
-        int porcentajeInvariante2 = (invariantes[1]*100)/Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
-        int porcentajeInvariante3 = (invariantes[2]*100)/Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
+    private void updateBarra(Integer @NotNull [] invariantes) {
+        int porcentajeInvariante1 = (invariantes[0] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
+        int porcentajeInvariante2 = (invariantes[1] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
+        int porcentajeInvariante3 = (invariantes[2] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
 
         barraInvariante1.setValue(porcentajeInvariante1);
         barraInvariante2.setValue(porcentajeInvariante2);
         barraInvariante3.setValue(porcentajeInvariante3);
     }
 }
-

@@ -147,7 +147,7 @@
             <properties>
               <background color="-16777216"/>
               <foreground color="-16777216"/>
-              <text value="Invariante1"/>
+              <text value="Invariante 1"/>
             </properties>
           </component>
           <hspacer id="9b66d">

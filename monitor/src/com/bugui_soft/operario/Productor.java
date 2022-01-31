@@ -9,32 +9,18 @@
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;
-import com.bugui_soft.utils.Rdp;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.bugui_soft.Main.finDePrograma;
-import static com.bugui_soft.Main.monitor;
-
-public class Productor implements Runnable {
-
-    private final Integer[] tInvariante;
+public class Productor extends Operario implements Runnable {
 
     public Productor() {
-        //Invariante de transiciones del Productor.(T4 a T7)
-        tInvariante = new Integer[]{0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0};
+        //Invariante de transiciones del Productor.(T2 a T5)
+        Integer[] tInvariante = new Integer[]{2, 3, 4, 5};
+        setTInvariante(tInvariante);
     }
 
     public void run() {
-        Thread.currentThread().setName("Productor");
-        while (!finDePrograma) {
-            monitor.dispararTransicion(tInvariante);
-            try {
-                TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_PRODUCTOR_MS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        Thread.currentThread().setName(Constantes.PRODUCTOR);
+        aTrabajar(Constantes.SLEEP_PRODUCTOR_MS);
     }
 
 }

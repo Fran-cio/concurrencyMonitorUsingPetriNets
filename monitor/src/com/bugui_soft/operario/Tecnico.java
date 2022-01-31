@@ -9,31 +9,19 @@
 package com.bugui_soft.operario;
 
 import com.bugui_soft.utils.Constantes;
-import com.bugui_soft.utils.Rdp;
 
-import java.util.concurrent.TimeUnit;
 
-import static com.bugui_soft.Main.finDePrograma;
-import static com.bugui_soft.Main.monitor;
-
-public class Tecnico implements Runnable {
-    private final Integer[] tInvariante;
+public class Tecnico extends Operario implements Runnable {
 
     public Tecnico() {
-        //transiciones de T8 a T11
-        tInvariante = new Integer[]{0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1};
+        //transiciones de T6 a T9
+        Integer[] tInvariante = new Integer[]{6, 7, 8, 9};
+        setTInvariante(tInvariante);
     }
 
     public void run() {
-        Thread.currentThread().setName("Tecnico");
-        while (!finDePrograma) {
-            monitor.dispararTransicion(tInvariante);
-            try {
-                TimeUnit.MILLISECONDS.sleep(Constantes.SLEEP_TECNICO_MS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        Thread.currentThread().setName(Constantes.TECNICO);
+        aTrabajar(Constantes.SLEEP_TECNICO_MS);
     }
 
 }
