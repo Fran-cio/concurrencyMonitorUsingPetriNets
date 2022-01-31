@@ -25,7 +25,7 @@
 *.class
 
 monitor/data/Log.txt
-./monitor/out/*
+./monitor/out
 # Drive Files
 *.ini
 
