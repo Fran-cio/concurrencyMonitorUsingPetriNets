@@ -25,7 +25,8 @@
 
 # IntelliJ Files
 .idea
-monitor/out
+out
+*.iml
 
 # Archivos del proyecto
 redes_de_petri
