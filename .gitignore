@@ -18,11 +18,12 @@
 *.zip
 *.tar.gz
 *.rar
-*.xml
 
 # Output files
 *.out
 *.class
+
+.idea
 
 redes_de_petri/PIPEv4.3.0
 monitor/data/Log.txt
