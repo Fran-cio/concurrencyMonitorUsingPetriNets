@@ -23,11 +23,15 @@
 *.out
 *.class
 
+# IntelliJ Files
 .idea
-
-redes_de_petri/PIPEv4.3.0
-monitor/data/Log.txt
 monitor/out
+
+# Archivos del proyecto
+redes_de_petri
+monitor/data/Log.txt
+MARCADOS.xlsx
+
 # Drive Files
 *.ini
 
