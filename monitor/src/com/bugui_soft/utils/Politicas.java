@@ -8,8 +8,6 @@
 
 package com.bugui_soft.utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 
 import static com.bugui_soft.Main.exchangerGUI;
@@ -64,7 +62,7 @@ public class Politicas {
         return obtenerMenor(transPot);
     }
 
-    private Integer obtenerMenor(Integer @NotNull [] transPot) {
+    private Integer obtenerMenor(Integer[] transPot) {
         Integer minimo = Integer.MAX_VALUE;
         int posMin = 0;
         //se le otorga prioridad al conflicto ya que pone a su invariante en desventaja

@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a04db715-ecf0-4251-a2fa-cefdc90e694e" name="Changes" comment="doc: Cambie nombres de funciones y resolvi algunos TODO">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/monitor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/monitor.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Interfaz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Interfaz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Monitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Monitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Politicas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Politicas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Rdp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Rdp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Utilidades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Utilidades.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/VectorTSensibilizadas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/VectorTSensibilizadas.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +43,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/corretto-1.8.0_302/src.zip!/sun/misc/Unsafe.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

@@ -1,7 +1,5 @@
 package com.bugui_soft.utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
 
 import static com.bugui_soft.Main.*;
@@ -61,7 +59,7 @@ public class Interfaz extends JFrame implements Runnable {
         Marcado.setText("Marcado Final: " + marcado);
     }
 
-    private void updateBarra(Integer @NotNull [] invariantes) {
+    private void updateBarra(Integer[] invariantes) {
         int porcentajeInvariante1 = (invariantes[0] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
         int porcentajeInvariante2 = (invariantes[1] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;
         int porcentajeInvariante3 = (invariantes[2] * 100) / Constantes.NUMERO_DE_TRANS_A_EJECUTAR;

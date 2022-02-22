@@ -8,9 +8,6 @@
 
 package com.bugui_soft.utils;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 
 import static com.bugui_soft.Main.*;
@@ -96,7 +93,7 @@ public class Rdp {
         return false;
     }
 
-    private void actualizarMarcado(@NotNull Integer disparo) {
+    private void actualizarMarcado(Integer disparo) {
         Integer[] vecDisparar = new Integer[CANTIDAD_TRANSICIONES];
         Arrays.fill(vecDisparar, 0);
         vecDisparar[disparo] = 1;
@@ -124,9 +121,7 @@ public class Rdp {
             System.exit(1);
         }
     }
-
-    @Contract(pure = true)
-    private static Integer @NotNull [] generarTransicionesSensibilizadas() {
+    private static Integer[] generarTransicionesSensibilizadas() {
         //creo un arreglo inicializado en 1 por defecto
         Integer[] nuevaTS = new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
