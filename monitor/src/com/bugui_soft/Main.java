@@ -55,11 +55,19 @@ public class Main {
         for (int i = 0; i < CANTIDAD_PRODUCTORES; i++) {
             operarios.add(operarioFactory.getOperario(PRODUCTOR));
         }
+
         for (int i = 0; i < CANTIDAD_TECNICOS; i++) {
             operarios.add(operarioFactory.getOperario(TECNICO));
         }
-        operarios.add(operarioFactory.getOperario(DESCARTADOR));
-        operarios.add(operarioFactory.getOperario(CALIDAD));
+
+        for (int i = 0; i < CANTIDAD_DESCARTADORES; i++) {
+            operarios.add(operarioFactory.getOperario(DESCARTADOR));
+        }
+
+        for (int i = 0; i < CANTIDAD_CALIDAD; i++) {
+            operarios.add(operarioFactory.getOperario(CALIDAD));
+        }
+
     }
 
     /**

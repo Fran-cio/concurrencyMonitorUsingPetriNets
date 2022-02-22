@@ -11,6 +11,8 @@ public final class Constantes {
     public static final String CALIDAD = "Operario.Calidad"; //HILOS CELESTES
     public static final Integer CANTIDAD_TECNICOS = 3;
     public static final Integer CANTIDAD_PRODUCTORES = 3;
+    public static final Integer CANTIDAD_CALIDAD = 1;
+    public static final Integer CANTIDAD_DESCARTADORES = 1;
     public static final Integer SLEEP_PRODUCTOR_MS = 5;
     public static final Integer SLEEP_TECNICO_MS = 5;
     public static final Integer SLEEP_CALIDAD_MS = 5;
