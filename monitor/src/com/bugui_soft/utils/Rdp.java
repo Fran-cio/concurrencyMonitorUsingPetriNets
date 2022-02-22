@@ -31,29 +31,9 @@ public class Rdp {
         synchronized (lock) {
             if (rdp == null) {
                 rdp = new Rdp();
-                mtxIncidencia = new Integer[][]{
-                        {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-                        {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
-                        {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
-                        {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
-                        {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
-                        {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
-                        {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
-                        {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
-                        {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
-
+                mtxIncidencia = MATRIZ_DE_INCIDENCIA;
                 //marcado inicial
                 marcadoActual = MARCADO_INICIAL.clone();
-
                 //array de estado de sensibilización de transiciones
                 Integer[] transicionesSensibilizadasInicial = generarTransicionesSensibilizadas();
                 transicionesSensibilizadasActual =

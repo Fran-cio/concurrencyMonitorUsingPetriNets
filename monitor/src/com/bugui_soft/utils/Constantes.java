@@ -16,9 +16,29 @@ public final class Constantes {
     public static final Integer SLEEP_CALIDAD_MS = 5;
     public static final Integer SLEEP_DESCARTADOR_MS = 5;
     /*---------------------------------------RedDePetri-----------------------------------------------------------------*/
+    public static final Integer[][] MATRIZ_DE_INCIDENCIA = new Integer[][]{
+            {-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
+            {1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {-1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+            {0, 0, 1, -1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, -1, 1, 0, 0, 0, 0, -1, 1, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0},
+            {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 0},
+            {0, 0, 0, 0, 0, 0, -1, 0, 0, 1, 0},
+            {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, -1, 1, -1, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 1, -1, 0, 0, 0},
+            {0, 0, 0, -1, 1, 0, -1, 1, 0, 0, 0},
+            {0, 0, -1, 1, 0, 0, 0, -1, 1, 0, 0},
+            {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, 0}};
+
     public static final Integer[] MARCADO_INICIAL = {3, 0, 1, 1, 0, 0, 2, 0, 0, 1, 0, 3, 0, 2, 0, 2, 2, 3};
-    public static final Integer CANTIDAD_PLAZAS = 18;
-    public static final Integer CANTIDAD_TRANSICIONES = 11;
+    public static final Integer CANTIDAD_PLAZAS = MATRIZ_DE_INCIDENCIA.length;
+    public static final Integer CANTIDAD_TRANSICIONES = MATRIZ_DE_INCIDENCIA[0].length;
     /*---------------------------------------Temporilizacion-----------------------------------------------------------------*/
     public static final Integer[] TRANS_TEMP_DE_INV_1 = {1, 10};
     public static final Integer[] TRANS_TEMP_DE_INV_2 = {3, 4, 5};
