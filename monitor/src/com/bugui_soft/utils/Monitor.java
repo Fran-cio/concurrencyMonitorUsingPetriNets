@@ -40,23 +40,20 @@ public class Monitor {
      * a disparar, se va lo va a liberar.
      *
      * @param tDisparable trans a disparar
-     * @return TRUE si se puedo disparar o FALSE si no se puedo disparar.
      */
-    public boolean cambiarEstadoDeRed(Integer tDisparable) {
+    public void cambiarEstadoDeRed(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         colaDeEntrada();
-        return dentroDelMonitor(tDisparable);
+        dentroDelMonitor(tDisparable);
     }
 
-    private boolean dentroDelMonitor(Integer tDisparable){
+    private void dentroDelMonitor(Integer tDisparable){
         Boolean seDisparo = rdp.disparar(tDisparable);
         notificar();
         if (!seDisparo) {
             enviarAColaDeCondicion(tDisparable);
-            return dentroDelMonitor(tDisparable);
+            dentroDelMonitor(tDisparable);
         }
-
-        return true;
     }
 
     private void enviarAColaDeCondicion(Integer tDisparable) {

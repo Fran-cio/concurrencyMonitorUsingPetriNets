@@ -22,7 +22,7 @@ public abstract class Operario {
     protected void aTrabajar(Integer tiempoDeTrabajo) {
         while (!finDePrograma) {
             for (Integer transicion : tInvariante) {
-                while (!monitor.cambiarEstadoDeRed(transicion))
+                monitor.cambiarEstadoDeRed(transicion);
 
                 if (finDePrograma) break;
                 try {
