@@ -9,7 +9,6 @@
 package com.bugui_soft.utils;
 
 import com.bugui_soft.Main;
-import org.jetbrains.annotations.NotNull;
 
 import static com.bugui_soft.utils.Constantes.*;
 
@@ -68,30 +67,44 @@ public class VectorTSensibilizadas {
      * @param disparo: Numero transicion a dispararse
      * @return Si se pudo disparar o no
      **/
-    public boolean estaSensibilizado(@NotNull Integer disparo) {
+    public boolean estaSensibilizado(Integer disparo) {
         if (sensibilizada[disparo] > 0 && !estaEsperando[disparo]) {
             /*
              * Si esta sensibilizado por tokens y no hay ningun hilo ya esperando por esa transicion, entra a este if
              */
-            Long[] timeStamp = Rdp.getTimeStamp();
-            long tiempoActual = System.currentTimeMillis();
-            long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
-            long tiempoMaxVentana = timeStamp[disparo] + beta[disparo];
-            boolean estamosEnVentana = tiempoActual >= tiempoMinVentana && tiempoActual <= tiempoMaxVentana;
-            boolean antesDeAlfa = tiempoActual < tiempoMinVentana;
+            if(alfa[disparo]==0) return true; //No esta temporizada
 
-            if (estamosEnVentana) return true;
-            try {
-                estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual, disparo);
-                if (sensibilizada[disparo] == 1) {
-                    return true;
-                }
-            } catch (TimeoutException e) {
-                System.out.println("La transición T" + disparo + " se pasó la ventana de tiempo");
-                sensibilizada[disparo] = 0;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            return estaSensibilizadaTemporalmente(disparo); //Checkea sensibilidad temporal
+        }
+        return false;
+    }
+
+    private boolean estaSensibilizadaTemporalmente(Integer disparo){
+        Long[] timeStamp = Rdp.getTimeStamp();
+        long tiempoActual = System.currentTimeMillis();
+        long tiempoMinVentana = timeStamp[disparo] + alfa[disparo];
+        long tiempoMaxVentana = timeStamp[disparo] + beta[disparo];
+        boolean estamosEnVentana = tiempoActual >= tiempoMinVentana && tiempoActual <= tiempoMaxVentana;
+        boolean antesDeAlfa = tiempoActual < tiempoMinVentana;
+
+        if (estamosEnVentana) return true;
+        try {
+            estaAntesDeAlfa(antesDeAlfa, tiempoMinVentana, tiempoActual, disparo);
+
+            tiempoActual = System.currentTimeMillis();
+            boolean sePasoLaVentana = tiempoActual >= tiempoMaxVentana;
+
+            if(sePasoLaVentana) //Si el hilo espero de mas, no va a disparar
+                throw new TimeoutException();
+
+            if (sensibilizada[disparo] == 1)
+                return true;
+
+        } catch (TimeoutException e) {
+            System.out.println("La transición T" + disparo + " se pasó la ventana de tiempo");
+            sensibilizada[disparo] = 0;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return false;
     }
@@ -104,11 +117,6 @@ public class VectorTSensibilizadas {
     private void estaAntesDeAlfa(boolean antesDeAlfa, long tiempoMinVentana, long tiempoActual, Integer disparo) throws TimeoutException, InterruptedException {
         if (antesDeAlfa) {
             estaEsperando[disparo] = true;
-            if (Monitor.getMutex().availablePermits() != 0) {
-                System.out.println("El mutex ha dejado de ser binario");
-                System.exit(ERROR_EXIT_STATUS);//Se puede sacar: Si el semaforo deja de ser binario muere aca
-            }
-
             //Antes de irse a dormir, libera otra transicion potencial
             Main.monitor.notificar();
             long tiempoDormir = tiempoMinVentana - tiempoActual;
@@ -118,7 +126,6 @@ public class VectorTSensibilizadas {
                 e.printStackTrace();
             }
             Monitor.getMutex().acquire();
-
             estaEsperando[disparo] = false;
         } else {
             throw new TimeoutException();

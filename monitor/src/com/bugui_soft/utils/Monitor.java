@@ -1,7 +1,5 @@
 package com.bugui_soft.utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.concurrent.*;
 
 import static com.bugui_soft.utils.Constantes.CANTIDAD_TRANSICIONES;
@@ -42,23 +40,23 @@ public class Monitor {
      * a disparar, se va lo va a liberar.
      *
      * @param tDisparable trans a disparar
-     * @return TRUE si se puedo disparar o FALSE si no se puedo disparar.
      */
-    public boolean cambiarEstadoDeRed(Integer tDisparable) {
+    public void cambiarEstadoDeRed(Integer tDisparable) {
         // intenta tomar el mutex si esta ocupado se va a dormir hasta que se desocupe
         colaDeEntrada();
-
-        Boolean seDisparo = rdp.disparar(tDisparable);
-        notificar();
-
-        if (!seDisparo) {
-            enviarAColaDeCondicion(tDisparable);
-            return false;
-        }
-        return true;
+        dentroDelMonitor(tDisparable);
     }
 
-    private void enviarAColaDeCondicion(@NotNull Integer tDisparable) {
+    private void dentroDelMonitor(Integer tDisparable){
+        Boolean seDisparo = rdp.disparar(tDisparable);
+        notificar();
+        if (!seDisparo) {
+            enviarAColaDeCondicion(tDisparable);
+            dentroDelMonitor(tDisparable);
+        }
+    }
+
+    private void enviarAColaDeCondicion(Integer tDisparable) {
         try {
             colasCondition[tDisparable].acquire();
         } catch (InterruptedException e) {
@@ -82,13 +80,13 @@ public class Monitor {
      * y este sale del monitor
      */
     public void notificar() {
-        liberarUno();
-
-        if (mutex.availablePermits() != 0) {
-            System.out.println("Error en el mutex: la entrada al monitor ha dejado de ser binaria: ");
-            System.exit(1); //Si el semaforo deja de ser binario muere aca
+        if (!liberarUno()) {
+            if (mutex.availablePermits() != 0) {
+                System.out.println("Error en el mutex: la entrada al monitor ha dejado de ser binaria: ");
+                System.exit(1); //Si el semaforo deja de ser binario muere aca
+            }
+            mutex.release();
         }
-        mutex.release();
     }
 
     /**
@@ -96,7 +94,7 @@ public class Monitor {
      * que tienen transiciones sensibilizadas
      */
 
-    private Integer @NotNull [] getTransPotencialColas() {
+    private Integer[] getTransPotencialColas() {
         Integer[] aux = new Integer[CANTIDAD_TRANSICIONES];
         for (int i = 0; i < CANTIDAD_TRANSICIONES; i++) {
             //si hay hilos esperando y transiciones sensibilizadas
@@ -114,10 +112,14 @@ public class Monitor {
      * que no esten esperando la ventana de estas
      * la politica decide cual notificar para mantener la carga de los invariantes.
      */
-    public void liberarUno() {
+    public boolean liberarUno() {
         Integer[] transicionesEjecutables = getTransPotencialColas();
         Integer cualDisparar = politica.cualDisparar(transicionesEjecutables);
-        colasCondition[cualDisparar].release();
+        if(colasCondition[cualDisparar].hasQueuedThreads()) {
+            colasCondition[cualDisparar].release();
+            return true;
+        }
+        return false;
     }
 
     public Politicas getPolitica() {

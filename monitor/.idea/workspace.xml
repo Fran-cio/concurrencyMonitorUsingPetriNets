@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a04db715-ecf0-4251-a2fa-cefdc90e694e" name="Changes" comment="doc: Cambie nombres de funciones y resolvi algunos TODO">
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/monitor.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/monitor.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="a04db715-ecf0-4251-a2fa-cefdc90e694e" name="Changes" comment="! Fix: -Cambie la politica de senializado.&#10;- cambie de lugar algunas funciones para que tenga mejor compresion.&#10;- Verífico de se superó la ventana de tiempo después de esperar&#10;- Saque las anotaciones&#10;- Si no está temporizada no hago los calculos asociados">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Constantes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Constantes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/bugui_soft/utils/Rdp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/bugui_soft/utils/Rdp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +39,9 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/corretto-1.8.0_302/src.zip!/sun/misc/Unsafe.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -149,6 +149,7 @@
       <workItem from="1643646633477" duration="147000" />
       <workItem from="1643647037391" duration="347000" />
       <workItem from="1643647471722" duration="303000" />
+      <workItem from="1645551457164" duration="304000" />
     </task>
     <task id="LOCAL-00001" summary="Funcionando">
       <created>1639086029030</created>
@@ -248,7 +249,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642688560888</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="! Fix: -Cambie la politica de senializado.&#10;- cambie de lugar algunas funciones para que tenga mejor compresion.&#10;- Verífico de se superó la ventana de tiempo después de esperar&#10;- Saque las anotaciones&#10;- Si no está temporizada no hago los calculos asociados">
+      <created>1645547205235</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1645547205235</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -286,7 +294,8 @@
     <MESSAGE value="!build: -Agregada clase abstracta Operario&#10;-Cambio en la forma que se usaba el Monitor" />
     <MESSAGE value="build: 2da propuesta del monitor, a mi parecer, mejor conceptualmente" />
     <MESSAGE value="doc: Cambie nombres de funciones y resolvi algunos TODO" />
-    <option name="LAST_COMMIT_MESSAGE" value="doc: Cambie nombres de funciones y resolvi algunos TODO" />
+    <MESSAGE value="! Fix: -Cambie la politica de senializado.&#10;- cambie de lugar algunas funciones para que tenga mejor compresion.&#10;- Verífico de se superó la ventana de tiempo después de esperar&#10;- Saque las anotaciones&#10;- Si no está temporizada no hago los calculos asociados" />
+    <option name="LAST_COMMIT_MESSAGE" value="! Fix: -Cambie la politica de senializado.&#10;- cambie de lugar algunas funciones para que tenga mejor compresion.&#10;- Verífico de se superó la ventana de tiempo después de esperar&#10;- Saque las anotaciones&#10;- Si no está temporizada no hago los calculos asociados" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
