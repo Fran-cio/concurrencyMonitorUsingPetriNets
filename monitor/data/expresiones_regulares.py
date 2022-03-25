@@ -20,10 +20,11 @@ condicion = True
 print("\n", contador)
 print("\ninvariante 1:", contador["T10"], "\ninvariante 2:", contador["T5"], "\ninvariante 3:", contador["T9"])
 
-while condicion:
-    condicion = re.search(patron, resultado)
-    resultado = re.sub(
+while True:
+    nuevoResultado = re.sub(
         patron, '\g<4>\g<7>\g<9>\g<12>\g<14>\g<16>\g<20>\g<22>\g<24>\g<26>', resultado)
+    if(nuevoResultado == resultado ): break
+    resultado = nuevoResultado
 
 if resultado.count != 0:
     print("\nSobrante:\n", resultado)
