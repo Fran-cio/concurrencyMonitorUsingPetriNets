@@ -42,7 +42,7 @@
     <a href="https://github.com/Fran-cio/concurrencyMonitorUsingPetriNets"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Fran-cio/concurrencyMonitorUsingPetriNets/concurrencyMonitorUsingPetriNets">View Demo</a>
+    <a href="https://github.com/Fran-cio/concurrencyMonitorUsingPetriNets">View Demo</a>
     ·
     <a href="https://github.com/Fran-cio/concurrencyMonitorUsingPetriNets/issues">Report Bug</a>
     ·
